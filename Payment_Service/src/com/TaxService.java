@@ -32,6 +32,11 @@ public class TaxService {
         return this.tax.getTaxEntryById(id);
     }
     
-    
+    @PUT
+    @Path("/update")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String updateTaxEntryById(@QueryParam("id") int id, @FormParam("amount") float amount){
+        return this.tax.updateTaxEntryById(id, amount);
+    }
 
 }
