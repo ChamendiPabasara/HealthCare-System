@@ -12,7 +12,7 @@ public class DBConnector {
     private static String username = "root";
     private static String password = "";
     private static Connection con;
-//    private static String urlstring;
+
 
     public static Connection getConnection() {
         try {
