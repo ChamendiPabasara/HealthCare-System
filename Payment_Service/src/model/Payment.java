@@ -76,5 +76,33 @@ public class Payment {
 			return "Error occur during retrieving \n" + e.getMessage();
 		}
 	}
+	
+	public double calculateSubAmount(int appointmentId) {
+		double subAmount = 0;
+		try(Connection con  = DBConnector.getConnection()){
+			String getQuery = "select h.hosp_charge,d.doc_charge\n" + 
+					"from appoinment a\n" + 
+					"join doctor d on d.doc_id = a.doctor_doc_id \n" + 
+					"join hospital h on h.hosp_id = a.hospital_hosp_id \n" + 
+					"where a.appoinment_id = ?;" ;
+			PreparedStatement pstmt = con.prepareStatement(getQuery);
+			ResultSet rs = pstmt.executeQuery(getQuery);
+			
+			float docCharge = 0;
+			float hospCharge = 0;
+			while(rs.next()) {
+				docCharge = rs.getFloat("doc_charge");
+				hospCharge = rs.getFloat("hosp_charge");
+			}
+			
+			subAmount = docCharge + hospCharge;
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+	
+		}
+		return subAmount;	
+		
+	}
 
 }
