@@ -10,21 +10,13 @@ import config.DBConnector;
 
 public class Payment {
 
-	public String addPayment(String cardType, 
-							 int cardNumber, 
-							 String nameOnCard, 
-							 int cvc, 
-							 Date expireDate,
-							 String status, 
-							 double subAmount, 
-							 Date paymentDate, 
-							 int taxId, 
-							 int appointmentId) {
-		
+	public String addPayment(String cardType, int cardNumber, String nameOnCard, int cvc, Date expireDate,
+			String status, double subAmount, Date paymentDate, int taxId, int appointmentId) {
+
 		try (Connection con = DBConnector.getConnection()) {
 			String insertQuery = " insert into payment values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertQuery);
-			
+
 			pstmnt.setString(1, cardType);
 			pstmnt.setInt(2, cardNumber);
 			pstmnt.setString(3, nameOnCard);
@@ -40,6 +32,48 @@ public class Payment {
 			return "Payment added successfully...";
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
+		}
+	}
+
+	public String getPaymentByPatient(int id) {
+		try (Connection con = DBConnector.getConnection()) {
+			String getQuery = "select py.payment_id, p.p_fname, p.p_lname, py.date, py.sub_amount, d.doc_fname, d.doc_lname, h.hosp_name from appoinment a \n"
+					+ "join patient p on a.patient_patient_id = p.patient_id \n"
+					+ "join payment py on a.appoinment_id = py.appoinment_appoinment_id\n"
+					+ "join doctor d on a.doctor_doc_id = d.doc_id\n"
+					+ "join hospital h on a.hospital_hosp_id = h.hosp_id\n" + "where patient_id = ?;";
+			PreparedStatement pstmnt = con.prepareStatement(getQuery);
+			pstmnt.setInt(1, id);
+			String output = "<table>" 
+					+ "<tr>" 
+					+ "<th>Payment ID</th>" 
+					+ "<th>Patient Name</th>"
+					+ "<th>Payment Date</th>" 
+					+ "<th>Amount</th>" 
+					+ "<th>Doctor</th>" 
+					+ "<th>Hospital</th>";
+			ResultSet rs = pstmnt.executeQuery();
+			
+			while (rs.next()) {
+				int payId = rs.getInt("payment_id");
+				String patientName = rs.getString("p_fname") + " " + rs.getString("p_lname");
+				Date paymentDate = rs.getDate("date");
+				double subAmount = rs.getDouble("sub_amount");
+				String doctorName = rs.getString("doc_fname") + " " + rs.getString("doc_lname");
+				String hospitalName = rs.getString("hosp_name");
+
+				output += "<tr><td>" + payId + "</td>";
+				output += "<td>" + patientName + "</td>";
+				output += "<td>" + paymentDate + "</td>";
+				output += "<td>" + subAmount + "</td>";
+				output += "<td>" + doctorName + "</td>";
+				output += "<td>" + hospitalName + "</td>";
+
+			}
+			output += "</table>";
+			return output;
+		} catch (SQLException e) {
+			return "Error occur during retrieving \n" + e.getMessage();
 		}
 	}
 
