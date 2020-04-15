@@ -4,6 +4,7 @@ import config.DBConnector;
 import java.sql.*;
 
 public class Tax {
+	
 	public String addTaxEntry(float amount) {
 		try (Connection con = DBConnector.getConnection()) {
 			String insertQuery = "insert into tax values (NULL, ?)";
@@ -11,10 +12,40 @@ public class Tax {
 			pstmt.setFloat(1, amount);
 			pstmt.execute();
 			con.close();
+			
 			return "Tax entry added successfully....";
+			
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
 		}
 	}
+	
+	public String getAllTaxEntry(){
+        try(Connection con  = DBConnector.getConnection()) {
+            String getQuery = "select * from tax";
+            PreparedStatement pstmt = con.prepareStatement(getQuery);
+
+            String output = "<table border=\"1\">" +
+                    "<tr>" +
+                    "<th>Tax ID</th>" +
+                    "<th>Tax amount</th>";
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                int taxId = rs.getInt("tax_id");
+                float taxAmount = rs.getFloat("tax_amount");
+
+                output += "<tr><td>" + taxId + "</td>";
+                output += "<td>" + taxAmount + "</td>";
+
+            }
+            output += "</table>";
+            con.close();
+            return output;
+        }
+        catch (SQLException e){
+            return "Error occur during retrieving \n" +
+                    e.getMessage();
+        }
+    }
 
 }
