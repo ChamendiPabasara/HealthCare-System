@@ -38,5 +38,12 @@ public class TaxService {
     public String updateTaxEntryById(@QueryParam("id") int id, @FormParam("amount") float amount){
         return this.tax.updateTaxEntryById(id, amount);
     }
+    
+    @DELETE
+    @Path("/delete")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteTaxEntryById(@QueryParam("id") int id){
+        return this.tax.deleteTaxEntryById(id);
+    }
 
 }
