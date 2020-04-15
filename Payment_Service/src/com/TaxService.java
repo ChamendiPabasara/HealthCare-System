@@ -17,5 +17,13 @@ public class TaxService {
     public String addTaxEntry(@FormParam("amount")float amount){
         return this.tax.addTaxEntry(amount);
     }
+    
+    @GET
+    @Path("/get")
+    @Produces(MediaType.TEXT_HTML)
+    public String getAllTaxEntry(){
+        return this.tax.getAllTaxEntry();
+    }
+
 
 }
