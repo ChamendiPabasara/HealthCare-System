@@ -47,5 +47,33 @@ public class Tax {
                     e.getMessage();
         }
     }
+	
+	public String getTaxEntryById(int id){
+        try(Connection con  = DBConnector.getConnection()) {
+            String getQuery = "select * from tax where tax_id = ?";
+            PreparedStatement pstmt = con.prepareStatement(getQuery);
+            pstmt.setInt(1, id);
+            String output = "<table border=\"1\">" +
+                    "<tr>" +
+                    "<th>Tax ID</th>" +
+                    "<th>Tax amount</th>";
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                int taxId = rs.getInt("tax_id");
+                float taxAmount = rs.getFloat("tax_amount");
+
+                output += "<tr><td>" + taxId + "</td>";
+                output += "<td>" + taxAmount + "</td>";
+
+            }
+            output += "</table>";
+            con.close();
+            return output;
+        }
+        catch (SQLException e){
+            return "Error occur during retrieving \n" +
+                    e.getMessage();
+        }
+    }
 
 }
