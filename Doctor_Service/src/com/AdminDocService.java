@@ -46,5 +46,22 @@ AdminDoc docObj = new AdminDoc();
 		String output = docObj.insertDoctor(nic, fname, lname, email, gender, liscen, special, phone, charge, userId); 
 		return output; 
 	}
+	
+	@DELETE
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_XML) 
+	@Produces(MediaType.TEXT_PLAIN) 
+	public String deleteDoctor(String docData) 
+	{  
+		//Convert the input string to an XML document  
+		Document doc = Jsoup.parse(docData, "", Parser.xmlParser());    
+		
+		//Read the value from the element <itemID>  
+		String d_id = doc.select("doc_id").text(); 
+		 
+		String output = docObj.deleteDoctor(d_id); 
+		 
+		return output; 
+	} 
 
 }

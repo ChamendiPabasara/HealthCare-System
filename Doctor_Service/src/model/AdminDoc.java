@@ -113,6 +113,37 @@ public class AdminDoc {
 
 		return output;
 	}
+	
+	public String deleteDoctor(String d_id) {
+		String output = "";
+
+		try (Connection con = DBConnector.getConnection()) {
+
+			if (con == null) {
+				return "Error while connecting to the database for deleting.";
+			}
+
+			// create a prepared statement
+			String query = "delete from doctor where doc_id=?";
+
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+
+			// binding values
+			preparedStmt.setInt(1, Integer.parseInt(d_id));
+
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+
+			output = "Deleted successfully";
+		} catch (Exception e) {
+			output = "Error while deleting the doctor.";
+			System.err.println(e.getMessage());
+		}
+
+		return output;
+
+	}
 
 	
 	
