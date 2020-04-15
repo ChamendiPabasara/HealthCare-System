@@ -20,7 +20,7 @@ public class Tax {
 		}
 	}
 	
-	public String getAllTaxEntry(){
+	 public String getAllTaxEntry(){
         try(Connection con  = DBConnector.getConnection()) {
             String getQuery = "select * from tax";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
@@ -48,7 +48,7 @@ public class Tax {
         }
     }
 	
-	public String getTaxEntryById(int id){
+	 public String getTaxEntryById(int id){
         try(Connection con  = DBConnector.getConnection()) {
             String getQuery = "select * from tax where tax_id = ?";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
@@ -76,7 +76,7 @@ public class Tax {
         }
     }
 	
-	public String updateTaxEntryById(int id, float amount){
+	 public String updateTaxEntryById(int id, float amount){
         try(Connection con  = DBConnector.getConnection()) {
             String updateQuery = "update tax set tax_amount = ? where tax_id = ?";
             PreparedStatement pstmt = con.prepareStatement(updateQuery);
@@ -91,5 +91,25 @@ public class Tax {
                     e.getMessage();
         }
     }
+	
+	  public boolean checkTaxEntryUsed(Connection con, int id){
+	        boolean flag = true;
+	        try {
+	            String checkQuery = "select exists(select * from payment where tax_tax_id = ?);";
+	            PreparedStatement pstmt = con.prepareStatement(checkQuery);
+	            pstmt.setInt(1, id);
+	            ResultSet rs = pstmt.executeQuery();
+	            while (rs.next()){
+	                if (rs.getInt(1) > 0)
+	                    flag = true;
+	                else
+	                    flag = false;
+	            }
+	        }
+	        catch (SQLException e){
+	            flag = true;
+	        }
+	        return flag;
+	    }
 
 }
