@@ -75,5 +75,21 @@ public class Tax {
                     e.getMessage();
         }
     }
+	
+	public String updateTaxEntryById(int id, float amount){
+        try(Connection con  = DBConnector.getConnection()) {
+            String updateQuery = "update tax set tax_amount = ? where tax_id = ?";
+            PreparedStatement pstmt = con.prepareStatement(updateQuery);
+            pstmt.setInt(2, id);
+            pstmt.setFloat(1, amount);
+            pstmt.executeUpdate();
+            con.close();
+            return "Tax entry updated successfully....";
+        }
+        catch (SQLException e){
+            return "Error occur during updating \n" +
+                    e.getMessage();
+        }
+    }
 
 }

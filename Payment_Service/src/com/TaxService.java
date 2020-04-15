@@ -30,6 +30,8 @@ public class TaxService {
     @Produces(MediaType.TEXT_HTML)
     public String getTaxEntryById(@QueryParam("id") int id){
         return this.tax.getTaxEntryById(id);
+    }
+    
     
 
 }
