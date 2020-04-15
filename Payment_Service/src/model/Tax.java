@@ -111,5 +111,26 @@ public class Tax {
 	        }
 	        return flag;
 	    }
+	  
+	  public String deleteTaxEntryById(int id){
+	        try(Connection con  = DBConnector.getConnection()) {
+	            if (checkTaxEntryUsed(con, id)){
+	                return "Cannot delete tax entry already used ";
+	            }
+	            else {
+	                String deleteQuery = "delete from tax where tax_id = ?";
+	                PreparedStatement pstmt = con.prepareStatement(deleteQuery);
+	                pstmt.setInt(1, id);
+	                pstmt.execute();
+	                con.close();
+	                return "Tax entry deleted successfully....";
+	            }
+
+	        }
+	        catch (SQLException e){
+	            return "Error occur during deleting \n" +
+	                    e.getMessage();
+	        }
+	    }
 
 }
