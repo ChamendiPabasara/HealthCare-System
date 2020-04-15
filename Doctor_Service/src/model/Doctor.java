@@ -43,6 +43,52 @@ public class Doctor {
 			 
 		 return output;  
 	} 
+	
+	public String updateDoctor(int d_id, String nic, String fname, String lname, String email, String gender, String liscen, String special, String phone, String charge, String userId) 
+	{   
+		String output = ""; 
+	 
+		try(Connection con  = DBConnector.getConnection())   
+		{    
+					 
+	        if (con == null)    
+	        {return "Error while connecting to the database for updating."; } 
+	 
+	        // create a prepared statement    
+	        String updatequery = "UPDATE doctor SET doc_nic =?, doc_fname =?, doc_lname =?, doc_email=?, doc_gender=?, liscen_no=?, specialization=?, phone=?, doc_charge=?, user_user_id=? WHERE doc_id=?"; 
+	 
+	        PreparedStatement preparedStmt = con.prepareStatement(updatequery); 
+	 
+	        // binding values
+	        
+	        preparedStmt.setString(1, nic);    
+	        preparedStmt.setString(2, fname);
+	        preparedStmt.setString(3, lname);
+	        preparedStmt.setString(4, email);
+	        preparedStmt.setString(5, gender);
+	        preparedStmt.setString(6, liscen);
+	        preparedStmt.setString(7, special);
+	        preparedStmt.setString(8,phone);
+	        preparedStmt.setDouble(9, Double.parseDouble(charge));
+	        preparedStmt.setInt(10, Integer.parseInt(userId));
+	        preparedStmt.setInt(11, d_id);
+	        
+	         
+	 
+	        // execute the statement    
+	        preparedStmt.execute();    
+	        con.close(); 
+	 
+	        output = "Updated successfully";   
+	    }   
+		catch (Exception e)   
+		{    
+			output = "Error while updating the Doctor";    
+			System.err.println(e.getMessage());   
+		} 
+	 
+	    return output;  
+	}
 
 
 }
