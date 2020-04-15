@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import config.DBConnector;
 
-public class Paymenet {
+public class Payment {
 
 	public String addPayment(String cardType, 
 							 int cardNumber, 
