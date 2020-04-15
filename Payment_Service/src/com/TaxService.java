@@ -25,5 +25,11 @@ public class TaxService {
         return this.tax.getAllTaxEntry();
     }
 
+    @GET
+    @Path("/getById")
+    @Produces(MediaType.TEXT_HTML)
+    public String getTaxEntryById(@QueryParam("id") int id){
+        return this.tax.getTaxEntryById(id);
+    
 
 }
