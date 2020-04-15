@@ -30,6 +30,12 @@ public class PaymentService {
 		
 	}
 	
-	
+	@GET
+	@Path("/get")
+	@Produces(MediaType.TEXT_HTML)
+	public String getPayment(@QueryParam("id") int id) {
+
+		return this.payment.getPaymentByPatient(id);
+	}	
 
 }
