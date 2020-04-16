@@ -1,6 +1,7 @@
 package com;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,6 +9,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -62,6 +67,22 @@ Patient patient = new Patient();
 		String user_user_id = ppp.get("user_user_id").getAsString();
 
 		String output=patient.updatePatient(patient_id, p_nic, p_fname, p_lname, p_dob, p_address, p_phone, p_email, p_gender, user_user_id);
+		return output;
+	}
+	
+
+	@DELETE
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deletePatient(String patientData) {
+		// Convert the input string to an XML document
+		Document doc1 = Jsoup.parse(patientData, "", Parser.xmlParser());
+		// Read the value from the element <itemID>
+		String patient_id = doc1.select("patient_id").text();
+		
+		String output=patient.deletePatient(patient_id);
+
 		return output;
 	}
 	
