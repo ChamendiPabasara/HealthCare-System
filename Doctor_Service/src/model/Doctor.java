@@ -2,47 +2,15 @@ package model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Time;
 
 import config.DBConnector;
 
 public class Doctor {
 	
-	public String assignDocHospital(int did, int hid, String date, Time time)  
-	 {   
-		 String output = ""; 
-	 
-		 try(Connection con  = DBConnector.getConnection())   
-		 {    
-			 
-	 		 if (con == null)    
-			 {return "Error while connecting to the database for inserting."; } 
-	 
-			 // create a prepared statement    
-			 String query = "INSERT INTO doctor_has_hospital(`doctor_doc_id`, `hospital_hosp_id`, `date`, `time`)" + "VALUES (?,?,?,?)"; 
-	 
-			 PreparedStatement preparedStmt = con.prepareStatement(query); 
-	 
-			 // binding values    
-			 preparedStmt.setInt(1, did);    
-			 preparedStmt.setInt(2, hid);    
-			 preparedStmt.setString(3, date);    
-			 preparedStmt.setTime(4, time);
-			 
-			 // execute the statement    
-			 preparedStmt.execute();    
-			 con.close(); 
-			 
-			 output = "Inserted successfully";   
-		 }   
-		 catch (Exception e)   
-		 {    
-			 output = "Error while assigning doctor to hospital.";    
-			 System.err.println(e.getMessage());   
-		 }
-			 
-		 return output;  
-	} 
+	
 	
 	public String updateDoctor(int d_id, String nic, String fname, String lname, String email, String gender, String liscen, String special, String phone, String charge, String userId) 
 	{   
@@ -89,6 +57,58 @@ public class Doctor {
 	 
 	    return output;  
 	}
+	
+	public String readDocAppointments(String did) {
+		String output = "";
 
+		try (Connection con = DBConnector.getConnection()) {
+
+			if (con == null) {
+				return "Error while connecting to the database for reading.";
+			}
+
+			// Prepare the html table to be displayed
+			output = "<table border=\"1\"><tr><th>Appointment_ID</th><th>Date</th><th>Time</th><th>Patient ID</th><th>Hospital ID</th>";
+
+			String query = "SELECT `appoinment_id`, `date`, `time`, `patient_patient_id`, `hospital_hosp_id` FROM appoinment WHERE doctor_doc_id=" +did;
+			
+			//PreparedStatement preparedStmt = con.prepareStatement(query);
+
+			// binding values
+			//preparedStmt.setInt(1, Integer.parseInt(did));
+			
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+
+			// iterate through the rows in the result set
+			while (rs.next()) {
+				
+				int aid = rs.getInt("appoinment_id");
+				String date = rs.getString("date");
+				String time = rs.getString("time");
+				int pid = rs.getInt("patient_patient_id");
+				int hid = rs.getInt("hospital_hosp_id");
+				
+
+				// Add into the html table
+				output += "<tr><td>" + aid + "</td>";
+				output += "<td>" + date + "</td>";
+				output += "<td>" + time + "</td>";
+				output += "<td>" + pid + "</td>";
+				output += "<td>" + hid + "</td>";
+				
+			}
+			//preparedStmt.execute();
+			con.close();
+
+			// Complete the html table
+			output += "</table>";
+		} catch (Exception e) {
+			output = "Error while Reading Doctor's Appointments.";
+			System.err.println(e.getMessage());
+		}
+
+		return output;
+	}
 
 }

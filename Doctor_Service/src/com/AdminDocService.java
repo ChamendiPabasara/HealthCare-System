@@ -2,6 +2,8 @@ package com;
 
 import model.AdminDoc;
 
+import java.sql.Time;
+
 //For REST Service 
 import javax.ws.rs.*; 
 import javax.ws.rs.core.MediaType; 
@@ -22,14 +24,14 @@ public class AdminDocService {
 AdminDoc docObj = new AdminDoc();
 	
 	@GET
-	@Path("/")
+	@Path("/getDoc")
 	@Produces(MediaType.TEXT_HTML)
 	public String readItems() {
 		return docObj.readDoctors();
 	}
 	
 	@POST 
-	@Path("/") 
+	@Path("/insertDoc") 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String insertDoctor(@FormParam("doc_nic") String nic, 
@@ -48,7 +50,7 @@ AdminDoc docObj = new AdminDoc();
 	}
 	
 	@DELETE
-	@Path("/")
+	@Path("/deleteDoc")
 	@Consumes(MediaType.APPLICATION_XML) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String deleteDoctor(String docData) 
@@ -63,5 +65,18 @@ AdminDoc docObj = new AdminDoc();
 		 
 		return output; 
 	} 
+	
+	@POST 
+	@Path("/assignDoc") 
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED) 
+	@Produces(MediaType.TEXT_PLAIN) 
+	public String assignDocHospital(@FormParam("doctor_doc_id") int did, 
+							@FormParam("hospital_hosp_id") int hid, 
+							@FormParam("date") String date, 
+							@FormParam("time") Time time) 
+	{  
+		String output = docObj.assignDocHospital(did, hid, date, time); 
+		return output; 
+	}
 
 }

@@ -23,7 +23,7 @@ public class DoctorService {
 Doctor docObj = new Doctor();
 	
 	@PUT 
-	@Path("/") 
+	@Path("/updateProfile") 
 	@Consumes(MediaType.APPLICATION_JSON) 
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String updateDoctor(String docData) 
@@ -49,18 +49,24 @@ Doctor docObj = new Doctor();
 		return output; 
 	}
 	
-	@POST 
-	@Path("/") 
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED) 
-	@Produces(MediaType.TEXT_PLAIN) 
-	public String assignDocHospital(@FormParam("doctor_doc_id") int did, 
-							@FormParam("hospital_hosp_id") int hid, 
-							@FormParam("date") String date, 
-							@FormParam("time") Time time) 
-	{  
-		String output = docObj.assignDocHospital(did, hid, date, time); 
+	@GET
+	@Path("/getDocApp")
+	@Produces(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_XML) 
+	//@Produces(MediaType.TEXT_PLAIN) 
+	public String readDocApp(String docData) {
+		
+		//Convert the input string to an XML document  
+		Document doc = Jsoup.parse(docData, "", Parser.xmlParser());    
+		
+		//Read the value from the element <itemID>  
+		String d_id = doc.select("doctor_doc_id").text(); 
+		 
+		String output = docObj.readDocAppointments(d_id); 
+		 
 		return output; 
 	}
+	
 	
 
 }

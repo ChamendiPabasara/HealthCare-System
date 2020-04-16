@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 
 import config.DBConnector;
 
@@ -55,7 +56,7 @@ public class AdminDoc {
 
 				// buttons
 				output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\"  class=\" btnUpdate btn btn-secondary\"></td>"
-						+ "<td><form method=\"post\" action=\"items.jsp\"> "
+						+ "<td><form method=\"post\" action=\"index.jsp\"> "
 						+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\"> "
 						+ "<input name=\"hidItemIDDelete\" type=\"hidden\" value=\"" +  id + "\">" + "</form></td></tr>";
 			}
@@ -144,6 +145,42 @@ public class AdminDoc {
 		return output;
 
 	}
+	
+	public String assignDocHospital(int did, int hid, String date, Time time)  
+	 {   
+		 String output = ""; 
+	 
+		 try(Connection con  = DBConnector.getConnection())   
+		 {    
+			 
+	 		 if (con == null)    
+			 {return "Error while connecting to the database for inserting."; } 
+	 
+			 // create a prepared statement    
+			 String query = "INSERT INTO doctor_has_hospital(`doctor_doc_id`, `hospital_hosp_id`, `date`, `time`)" + "VALUES (?,?,?,?)"; 
+	 
+			 PreparedStatement preparedStmt = con.prepareStatement(query); 
+	 
+			 // binding values    
+			 preparedStmt.setInt(1, did);    
+			 preparedStmt.setInt(2, hid);    
+			 preparedStmt.setString(3, date);    
+			 preparedStmt.setTime(4, time);
+			 
+			 // execute the statement    
+			 preparedStmt.execute();    
+			 con.close(); 
+			 
+			 output = "Inserted successfully";   
+		 }   
+		 catch (Exception e)   
+		 {    
+			 output = "Error while assigning doctor to hospital.";    
+			 System.err.println(e.getMessage());   
+		 }
+			 
+		 return output;  
+	} 
 
 	
 	
