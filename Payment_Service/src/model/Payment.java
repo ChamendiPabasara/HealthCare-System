@@ -44,16 +44,10 @@ public class Payment {
 					+ "join hospital h on a.hospital_hosp_id = h.hosp_id\n" + "where patient_id = ?;";
 			PreparedStatement pstmnt = con.prepareStatement(getQuery);
 			pstmnt.setInt(1, id);
-			String output = "<table>" 
-					+ "<tr>" 
-					+ "<th>Payment ID</th>" 
-					+ "<th>Patient Name</th>"
-					+ "<th>Payment Date</th>" 
-					+ "<th>Amount</th>" 
-					+ "<th>Doctor</th>" 
-					+ "<th>Hospital</th>";
+			String output = "<table>" + "<tr>" + "<th>Payment ID</th>" + "<th>Patient Name</th>"
+					+ "<th>Payment Date</th>" + "<th>Amount</th>" + "<th>Doctor</th>" + "<th>Hospital</th>";
 			ResultSet rs = pstmnt.executeQuery();
-			
+
 			while (rs.next()) {
 				int payId = rs.getInt("payment_id");
 				String patientName = rs.getString("p_fname") + " " + rs.getString("p_lname");
@@ -76,33 +70,66 @@ public class Payment {
 			return "Error occur during retrieving \n" + e.getMessage();
 		}
 	}
-	
+
 	public double calculateSubAmount(int appointmentId) {
 		double subAmount = 0;
-		try(Connection con  = DBConnector.getConnection()){
-			String getQuery = "select h.hosp_charge,d.doc_charge\n" + 
-					"from appoinment a\n" + 
-					"join doctor d on d.doc_id = a.doctor_doc_id \n" + 
-					"join hospital h on h.hosp_id = a.hospital_hosp_id \n" + 
-					"where a.appoinment_id = ?;" ;
+		try (Connection con = DBConnector.getConnection()) {
+			String getQuery = "select h.hosp_charge,d.doc_charge\n" + "from appoinment a\n"
+					+ "join doctor d on d.doc_id = a.doctor_doc_id \n"
+					+ "join hospital h on h.hosp_id = a.hospital_hosp_id \n" + "where a.appoinment_id = ?;";
 			PreparedStatement pstmt = con.prepareStatement(getQuery);
 			ResultSet rs = pstmt.executeQuery(getQuery);
-			
+
 			float docCharge = 0;
 			float hospCharge = 0;
-			while(rs.next()) {
+			while (rs.next()) {
 				docCharge = rs.getFloat("doc_charge");
 				hospCharge = rs.getFloat("hosp_charge");
 			}
-			
+
 			subAmount = docCharge + hospCharge;
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-	
+
 		}
-		return subAmount;	
-		
+		return subAmount;
+
+	}
+
+	public String updatePayment(String cardType,
+								int cardNumber,
+								String nameOnCard,
+								int cvc,
+								Date expireDate,
+								double subAmount,
+								Date paymentDate,
+								int taxId,
+								int appointmenetId){
+			
+			try(Connection con = DBConnector.getConnection()) {
+			String updateQuery = "update payment set cardType =?, cardNumber =?, nameOnCard =?, cvc =?, expireDate =?, subAmount =?, paymentDate =?, taxId =?, appointmenetId =?" +
+						 "where appointmenetId =?" ;
+						
+			PreparedStatement pstmt = con.prepareStatement(updateQuery);
+			pstmt.setString(1,cardType);
+			pstmt.setInt(2,cardNumber);
+			pstmt.setString(3,nameOnCard);
+			pstmt.setInt(4,cvc);
+			pstmt.setDate(5,expireDate);
+			pstmt.setDouble(6,subAmount);
+			pstmt.setDate(7,paymentDate);
+			pstmt.setInt(8,taxId);
+			pstmt.setInt(9,appointmenetId);
+			pstmt.executeUpdate();
+			con.close();
+	
+			return "Payment updated successfully....";
+			}
+			catch(SQLException e){
+				return "Error occur during updating \n" +
+						e.getMessage();
+			}
+
 	}
 
 }
