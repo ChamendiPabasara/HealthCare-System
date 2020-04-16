@@ -34,7 +34,7 @@ public String addAppointment( Date day, String time, int pid,int did,int hosID) 
 			
 
 			pstmnt.execute();
-			return "Payment added successfully...";
+			return "Appointment added successfully...";
 		}
 		catch(SQLException e){
 			return "Error occured during adding an Appoinment\n" + e.getMessage();
@@ -179,7 +179,7 @@ public String UpdateAppointment( Date day, String time,int did,int hosID) {
 		
 
 		pstmnt.execute();
-		return "Payment added successfully...";
+		return "Apointment Updated successfully...";
 	}
 	catch(SQLException e){
 		return "Error occured during Updating an Appointment\n" + e.getMessage();
