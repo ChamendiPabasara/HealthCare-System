@@ -4,6 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <%if (request.getParameter("nic") != null)
+	
 {
 	AdminDoc ad = new AdminDoc();
 	
@@ -11,7 +12,7 @@
 		request.getParameter("fname"),
 		request.getParameter("lname"),
 		request.getParameter("email"),
-		request.getParameter("gender"),
+		request.getParameter("rdoGender"),
 		request.getParameter("liscen"),
 		request.getParameter("special"), 
 		request.getParameter("phone"), 
@@ -27,9 +28,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Insert Doctor</title>
 </head>
 <body>
+
+<h1>Insert New Doctor</h1>
 
 <form id="formDoctor" name="formDoctor" method="post" action="insertDoctor.jsp">
 		NIC: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -44,18 +47,16 @@
 		Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input  name="email" type="text" > <br> <br>
 		
-	     <!-- GENDER -->   
-		 <!------<div class="input-group input-group-sm mb-3">    
-		 	<div class="input-group-prepend">    
-		 		<span class="input-group-text" id="lblName">Gender: </span>    
+	       
+		<span class="input-group-text" id="lblName">Gender: </span>    
 		 			  
-		 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male  <input type="radio" id="rdoGenderMale" name="rdoGender" value="Male">    
-		 					&nbsp;&nbsp;Female  <input type="radio" id="rdoGenderFemale" name="rdoGender" value="Female">   
-		 	
-		<br><br>---->
+		 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male 
+		 			<input type="radio" id="rdoGenderMale" name="rdoGender1" value="Male">
+		 			    
+		 			&nbsp;&nbsp;Female  
+		 			<input type="radio" id="rdoGenderFemale" name="rdoGender2" value="Female">   
+		<br><br>
 		
-		Gender: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input  name="gender" type="text" > <br> <br>
 		
 		Liscen NO: &nbsp;&nbsp;&nbsp;&nbsp;
 		<input  name="liscen" type="text"> <br><br>

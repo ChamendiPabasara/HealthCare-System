@@ -2,6 +2,8 @@ package com;
 
 import model.Doctor;
 
+import view.DoctorAppointment;
+
 import java.sql.Time;
 
 //For REST Service 
@@ -22,6 +24,7 @@ public class DoctorService {
 	
 Doctor docObj = new Doctor();
 	
+//Update doctor details
 	@PUT 
 	@Path("/updateProfile") 
 	@Consumes(MediaType.APPLICATION_JSON) 
@@ -49,23 +52,17 @@ Doctor docObj = new Doctor();
 		return output; 
 	}
 	
-	@GET
-	@Path("/getDocApp")
-	@Produces(MediaType.TEXT_HTML)
-	@Consumes(MediaType.APPLICATION_XML) 
-	//@Produces(MediaType.TEXT_PLAIN) 
-	public String readDocApp(String docData) {
-		
-		//Convert the input string to an XML document  
-		Document doc = Jsoup.parse(docData, "", Parser.xmlParser());    
-		
-		//Read the value from the element <itemID>  
-		String d_id = doc.select("doctor_doc_id").text(); 
-		 
-		String output = docObj.readDocAppointments(d_id); 
-		 
-		return output; 
-	}
+	// View appointment by doctor id
+			@GET
+			@Path("/{doctor_doc_id}")
+			// @Consumes(MediaType.APPLICATION_JSON)
+			@Produces(MediaType.APPLICATION_JSON)
+			public DoctorAppointment ShowAppointmentByDocId(@PathParam("doctor_doc_id") int id) {
+				
+				return docObj.ShowAppointmentByDocId(id);
+			}
+	
+
 	
 	
 
