@@ -186,5 +186,25 @@ public String UpdateAppointment( Date day, String time,int did,int hosID) {
 	}
 	
 }
+public String DeleteAppointment(int AppID) {
+	
+	try(Connection con  = DBConnector.getConnection()){
+		
+		
+		// create a prepared statement
+		 String Deletequery = "delete from appoinment where appoinment_id=?";
+		
+		 PreparedStatement pstmnt = con.prepareStatement(Deletequery);
+			pstmnt.setInt(1, AppID);
+			pstmnt.execute();
+			return "Appoinment Deleted successfully...";
+		
+	}
+	catch(SQLException e){
+		
+		return "Error occurrd during Deleting\n" + e.getMessage();
+	}
+	
+}
 
 }
