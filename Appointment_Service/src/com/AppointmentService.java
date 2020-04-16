@@ -59,5 +59,20 @@ public class AppointmentService {
 		return output;
 	}
 	
+	@DELETE
+	@Path("/delete")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String DeleteAppointment(@FormParam ("appoinment_id") Integer AppID )
+	{
+	
+	//Read the value from the element <AppID>
+		String output = App1.DeleteAppointment(AppID);
+        return output;
+
+	
+	
+	}
+	
 
 }
