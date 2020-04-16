@@ -47,5 +47,17 @@ public class AppointmentService {
 		return output;
 	}
 	
+	@PUT
+	@Path("/update") 
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String UpdateAppointment(@FormParam("date") Date day, @FormParam("time") String time,
+			@FormParam("doctor_doc_id") int did,
+			@FormParam("hospital_hosp_id") int hosID) 
+	{
+		String output = App1.UpdateAppointment(day, time, did, hosID);
+		return output;
+	}
+	
 
 }
