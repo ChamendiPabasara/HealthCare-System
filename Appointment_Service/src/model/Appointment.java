@@ -158,5 +158,33 @@ public String ReadAppointments() {
 	}
 }
 
+public String UpdateAppointment( Date day, String time,int did,int hosID) {
+	
+	try(Connection con  = DBConnector.getConnection()){
+		
+	
+		/*String doctor = "select doc_id from doctor where doc_fname =? AND doc_lname=?";
+		String hospital = "select hosp_id	 from hospital where hosp_name =?";
+		
+		
+		int did = Integer.parseInt(doctor);
+		int hid = Integer.parseInt(hospital);*/
+		
+		String updateAppQuery =  "UPDATE appoinment SET date=?,time=?,doctor_doc_id=?,hospital_hosp_id=? WHERE appoinment_id=?"; 
+		PreparedStatement pstmnt = con.prepareStatement(updateAppQuery);
+		pstmnt.setDate(1, day);
+		pstmnt.setString(2, time);
+		pstmnt.setInt(3, did);
+		pstmnt.setInt(4, hosID);
+		
+
+		pstmnt.execute();
+		return "Payment added successfully...";
+	}
+	catch(SQLException e){
+		return "Error occured during Updating an Appointment\n" + e.getMessage();
+	}
+	
+}
 
 }
