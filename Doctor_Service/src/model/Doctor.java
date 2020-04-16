@@ -2,6 +2,7 @@ package model;
 
 import view.DoctorAppointment;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,5 +117,6 @@ public class Doctor {
 			
 			return AppointmentList;
 		}
+		
 
 }

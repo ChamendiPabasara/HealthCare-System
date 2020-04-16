@@ -1,6 +1,7 @@
 package com;
 
 import model.AdminDoc;
+import view.ViewDoctor;
 
 import java.sql.Time;
 
@@ -77,6 +78,17 @@ AdminDoc docObj = new AdminDoc();
 	{  
 		String output = docObj.assignDocHospital(did, hid, date, time); 
 		return output; 
+	}
+	
+	// View appointment by doctor id
+	@GET
+	@Path("/{doc_id}")
+	// @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ViewDoctor ShowDoctortByDocId(@PathParam("doc_id") int id) {
+					
+		return docObj.ShowDoctortByDocId(id);
+	
 	}
 
 }

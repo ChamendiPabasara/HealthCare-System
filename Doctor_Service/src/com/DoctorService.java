@@ -3,6 +3,7 @@ package com;
 import model.Doctor;
 
 import view.DoctorAppointment;
+import view.ViewDoctor;
 
 import java.sql.Time;
 
@@ -61,9 +62,7 @@ Doctor docObj = new Doctor();
 				
 				return docObj.ShowAppointmentByDocId(id);
 			}
+			
+	   
 	
-
-	
-	
-
 }

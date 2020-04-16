@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import config.DBConnector;
+import view.ViewDoctor;
 
 public class AdminDoc {
 	
@@ -182,7 +185,66 @@ public class AdminDoc {
 		 return output;  
 	} 
 
-	
+	//show the type by DocID
+			public ViewDoctor ShowDoctortByDocId(int id) {
+			List<ViewDoctor> list = viewDoctor(id);
+				if(!list.isEmpty()) {
+					return	list.get(0);
+				}
+				return null;
+			}
+			
+			//view method
+				public List<ViewDoctor> viewDoctor(int id) {
+					
+						List <ViewDoctor> DoctorList = new ArrayList<>();
+						
+					try(Connection con  = DBConnector.getConnection())   
+					{
+						//Connection con = dbObj.connect();
+						if (con == null) {
+							
+							System.out.println("Error While reading from database");
+							return DoctorList;
+						}
+
+						String query;
+						
+						if(id==0) {
+						query = "SELECT * FROM doctor";
+						}
+						else {
+							query = "SELECT * FROM doctor WHERE doc_id="+id;	
+						}
+						Statement stmt = con.createStatement();
+						ResultSet results = stmt.executeQuery(query);
+
+						while (results.next()) {
+							ViewDoctor Doctor = new ViewDoctor(
+													results.getInt("doc_id"),
+													results.getString("doc_nic"),
+													results.getString("doc_fname"),
+													results.getString("doc_lname"),
+													results.getString("doc_email"),
+													results.getString("doc_gender"),
+													results.getString("liscen_no"),
+													results.getString("specialization"),
+													results.getInt("phone"),
+													results.getFloat("doc_charge"),
+													results.getInt("user_user_id")
+												);
+							DoctorList.add(Doctor);
+						}
+						con.close();
+					}
+					catch (Exception e) {
+						System.out.println("Error While Reading");
+						System.err.println(e.getMessage());
+					}
+					
+					return DoctorList;
+				}
+
 	
 
 }
