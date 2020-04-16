@@ -11,7 +11,7 @@ import config.DBConnector;
 
 public class Appointment {
 
-public String addAppointment( Date day, String time, int pid,int did,int hosID) {
+public String addAppointment( int AppID,Date day, String time, int pid,int did,int hosID) {
 		
 		try(Connection con  = DBConnector.getConnection()){
 			
@@ -23,13 +23,15 @@ public String addAppointment( Date day, String time, int pid,int did,int hosID) 
 			int did = Integer.parseInt(doctor);
 			int hid = Integer.parseInt(hospital);*/
 			
-			String insertAppQuery = " insert into appoinment values (?,?,?,?,?)";
+			String insertAppQuery = " insert into appoinment values (?,?, ?, ?, ?, ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertAppQuery);
-			pstmnt.setDate(1,day);
-			pstmnt.setString(2,time);
-			pstmnt.setInt(3,pid);
-			pstmnt.setInt(4,did);
-			pstmnt.setInt(5,hosID);
+			pstmnt.setInt(1,AppID);
+			pstmnt.setDate(2,day);
+			pstmnt.setString(3,time);
+			pstmnt.setInt(4,pid);
+			pstmnt.setInt(5,did);
+			pstmnt.setInt(6,hosID);
+			
 			
 			
 
