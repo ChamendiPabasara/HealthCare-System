@@ -84,7 +84,7 @@ public class Tax {
             pstmt.setFloat(1, amount);
             pstmt.executeUpdate();
             con.close();
-            return "Tax entry updated successfully....";
+            return "Tax entry updated successfully";
         }
         catch (SQLException e){
             return "Error occur during updating \n" +
@@ -123,7 +123,7 @@ public class Tax {
 	                pstmt.setInt(1, id);
 	                pstmt.execute();
 	                con.close();
-	                return "Tax entry deleted successfully....";
+	                return "Tax entry deleted successfully";
 	            }
 
 	        }
