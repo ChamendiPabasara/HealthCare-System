@@ -22,4 +22,17 @@ public class HospitalService {
 		return hospObj.readHospital();
 	}
 	
+	
+	@POST()
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String insertHospitals(@FormParam("hosp_name") String hospName,
+			@FormParam("hosp_address") String hospAddress, @FormParam("hosp_email") String hospEmail,
+			@FormParam("hosp_phone") String hospPhone, @FormParam("hosp_reg_date") String hospRegDate,
+			@FormParam("hosp_charge") String hospCharge) {
+
+		String output = hospObj.insertHospital(hospName, hospAddress, hospEmail, hospPhone, hospRegDate, hospCharge);
+		return output;
+	}
 }
