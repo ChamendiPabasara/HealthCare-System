@@ -2,6 +2,7 @@ package com;
 
 import model.Tax;
 
+import java.sql.Date;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -14,8 +15,10 @@ public class TaxService {
     @Path("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public String addTaxEntry(@FormParam("amount")float amount){
-        return this.tax.addTaxEntry(amount);
+    public String addTaxEntry(@FormParam("amount")float amount, 
+    						  @FormParam("validFrom") Date validFrom, 
+    						  @FormParam("validTo") Date validTo){
+        return this.tax.addTaxEntry(amount, validFrom, validTo);
     }
     
     @GET
@@ -34,11 +37,15 @@ public class TaxService {
     
     @PUT
     @Path("/update")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateTaxEntryById(@QueryParam("id") int id, @FormParam("amount") float amount){
-        return this.tax.updateTaxEntryById(id, amount);
+    public String updateTaxEntryById(@QueryParam("id") int id, 
+    								@FormParam("amount") float amount, 
+    								@FormParam("validFrom") Date validFrom,
+    								@FormParam("validTo") Date validTo){
+    	
+        return this.tax.updateTaxEntryById(id, amount, validFrom, validTo );
     }
-    
     @DELETE
     @Path("/delete")
     @Produces(MediaType.TEXT_PLAIN)
