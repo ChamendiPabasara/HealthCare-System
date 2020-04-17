@@ -79,5 +79,24 @@ public class Hospital {
 		return output;
 	}
 	
-	
+	public String deleteHospital(String hospID) {
+		String output = null;
+			try (Connection con = DBConnector.getConnection()){
+				if(con == null) {
+					return "Error while connecting to the database";
+				} else {
+					String query = "delete from hospital where hosp_id=?";
+					PreparedStatement preparedStmt = con.prepareStatement(query);
+					preparedStmt.setInt(1,Integer.parseInt(hospID));
+					
+					preparedStmt.execute();
+					con.close();
+					output = "Deleted Successfully";
+				}
+			}catch(Exception e) {
+				output = "Error while deleting hospital";
+				System.err.println(e.getMessage());
+			}
+		return output;
+	}
 }
