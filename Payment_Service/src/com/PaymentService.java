@@ -25,9 +25,9 @@ public class PaymentService {
 						   @FormParam("paymentDate") Date paymentDate,
 						   @FormParam("taxId") int taxId,
 						   @FormParam("appointmentId") int appointmentId) {
-		return this.payment.addPayment(cardType, cardNumber, nameOnCard, cvc, expireDate, status, paymentDate, taxId, appointmentId);
-		
+		return this.payment.addPayment(cardType, cardNumber, nameOnCard, cvc, expireDate, status, paymentDate, taxId, appointmentId);	
 	}
+	
 	
 	@GET
 	@Path("/getById")
@@ -37,12 +37,14 @@ public class PaymentService {
 		return this.payment.getPaymentByPatient(id);
 	}
 	
+	
 	@GET
     @Path("/get")
     @Produces(MediaType.TEXT_HTML)
     public String getAllPatmentEntry(){
         return this.payment.getAllPayment();
     }
+	
 	
 	@PUT
 	@Path("/update")
