@@ -35,4 +35,25 @@ public class HospitalService {
 		String output = hospObj.insertHospital(hospName, hospAddress, hospEmail, hospPhone, hospRegDate, hospCharge);
 		return output;
 	}
+	
+	@PUT
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updateHospital(String hospitalData) {
+		// Convert the input string to a JSON object
+		JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
+		// Read the values from the JSON object
+		String hospId = hospitalObject.get("hosp_id").getAsString();
+		String hospName = hospitalObject.get("hosp_name").getAsString();
+		String hospAddress = hospitalObject.get("hosp_address").getAsString();
+		String hospEmail = hospitalObject.get("hosp_email").getAsString();
+		String hospPhone = hospitalObject.get("hosp_phone").getAsString();
+		String hospRegDate = hospitalObject.get("hosp_reg_date").getAsString();
+		String HospCharge = hospitalObject.get("hosp_charge").getAsString();
+
+		String output = hospObj.updateHospitals(hospId, hospName, hospAddress, hospEmail, hospPhone, hospRegDate,
+				HospCharge);
+		return output;
+	}
 }
