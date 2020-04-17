@@ -2,6 +2,8 @@ package model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 
 import config.DBConnector;
@@ -97,6 +99,55 @@ public class Hospital {
 				output = "Error while deleting hospital";
 				System.err.println(e.getMessage());
 			}
+		return output;
+	}
+	
+	public String readHospital() {
+
+		String output = "";
+
+		try (Connection con = DBConnector.getConnection()){
+			if (con == null) {
+				return "Error while connecting to the database";
+			} else {
+
+				String query = "select * from hospital";
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+
+				output = "<table border=\"1\">"
+						+ "<tr><th>Hospital Name</th><th>Hospital Address</th><th>Hospital Email</th>"
+						+ "<th>Hospital Phone</th><th>Hospital Registered date</th><th>Hospital Charge</th><th>Update</th><th>Remove</th></tr>";
+
+				while (rs.next()) {
+					String hospID = Integer.toString(rs.getInt("hosp_id"));
+					String hospName = rs.getString("hosp_name");
+					String hospAddress = rs.getString("hosp_address");
+					String hospEmail = rs.getString("hosp_email");
+					String hospPhone = rs.getString("hosp_phone");
+					String hospRegDate = rs.getString("hosp_reg_date");
+					String hospCharge = Float.toString(rs.getFloat("hosp_charge"));
+					
+					output += "<tr><td>" + hospName + "</td>";
+					output += "<td>" + hospAddress + "</td>";
+					output += "<td>" + hospEmail + "</td>";
+					output += "<td>" + hospPhone + "</td>";
+					output += "<td>" + hospRegDate + "</td>";
+					output += "<td>" + hospCharge + "</td>";
+					
+					output += "<td>"
+							+ "<input name=\"btnUpdate\" type=\"button\"value=\"Update\" class=\"btn btn-secondary\">"
+							+ "</td>\r\n" + "<td>" + "<form method=\"get\" action=\"Items.jsp\">"
+							+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">"
+							+ "<input name=\"itemID\" type=\"hidden\" value=\"" + hospID + "\">" + "</form>" + "</td>"
+							+ "</tr>";
+				}
+
+			}
+		} catch (Exception e) {
+			output = "Error while reading";
+			System.err.println(e.getMessage());
+		}
 		return output;
 	}
 }
