@@ -16,7 +16,6 @@ public class Payment {
 							 int cvc, 
 							 Date expireDate,
 							 String status, 
-							 double subAmount, 
 							 Date paymentDate, 
 							 int taxId, 
 							 int appointmentId) {
@@ -25,6 +24,7 @@ public class Payment {
 			String insertQuery = " insert into payment values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertQuery);
 
+			double subAmount = this.calculateSubAmount(appointmentId);
 			pstmnt.setString(1, cardType);
 			pstmnt.setInt(2, cardNumber);
 			pstmnt.setString(3, nameOnCard);
@@ -37,7 +37,7 @@ public class Payment {
 			pstmnt.setInt(10, appointmentId);
 
 			pstmnt.execute();
-			return "Payment added Successfully";
+			return "Payment added successfully...";
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
 		}
@@ -53,14 +53,13 @@ public class Payment {
 			PreparedStatement pstmnt = con.prepareStatement(getQuery);
 			pstmnt.setInt(1, id);
 			String output = "<table>" + 
-							"<tr>" + 
-							"<th>Payment ID</th>" + 
-							"<th>Patient Name</th>" + 
-							"<th>Payment Date</th>" + 
-							"<th>Amount</th>" + 
-							"<th>Doctor</th>" + 
-							"<th>Hospital</th>";
-			
+							"<tr>" 
+							+ "<th>Payment ID</th>" 
+							+ "<th>Patient Name</th>"
+							+ "<th>Payment Date</th>" 
+							+ "<th>Amount</th>" 
+							+ "<th>Doctor</th>" 
+							+ "<th>Hospital</th>";
 			ResultSet rs = pstmnt.executeQuery();
 
 			while (rs.next()) {
@@ -142,24 +141,27 @@ public class Payment {
         }
     }
 
-
 	public double calculateSubAmount(int appointmentId) {
 		double subAmount = 0;
 		try (Connection con = DBConnector.getConnection()) {
 			String getQuery = "select h.hosp_charge,d.doc_charge\n" + "from appoinment a\n"
 					+ "join doctor d on d.doc_id = a.doctor_doc_id \n"
-					+ "join hospital h on h.hosp_id = a.hospital_hosp_id \n" + "where a.appoinment_id = ?;";
+					+ "join hospital h on h.hosp_id = a.hospital_hosp_id \n" 
+					+ "where a.appoinment_id = ?;";
 			PreparedStatement pstmt = con.prepareStatement(getQuery);
-			ResultSet rs = pstmt.executeQuery(getQuery);
+			pstmt.setInt(1, appointmentId);
+			ResultSet rs = pstmt.executeQuery();
 
+			Date today = new Date(System.currentTimeMillis());
 			float docCharge = 0;
 			float hospCharge = 0;
+			float taxAmount = getValidTax(today);
 			while (rs.next()) {
 				docCharge = rs.getFloat("doc_charge");
 				hospCharge = rs.getFloat("hosp_charge");
 			}
-
-			subAmount = docCharge + hospCharge;
+			con.close();
+			subAmount = docCharge + hospCharge + taxAmount;
 		} catch (SQLException e) {
 			e.printStackTrace();
 
@@ -167,20 +169,53 @@ public class Payment {
 		return subAmount;
 
 	}
+	
+	public float getValidTax(Date today) {
+		float taxAmount = 0;
+		try(Connection con = DBConnector.getConnection()) {
+			String searchQuey = "select tax_amount from tax "
+					+ "where valid_from < ?"
+					+ "and valid_to > ?";
+			PreparedStatement pstmt = con.prepareStatement(searchQuey);
+			pstmt.setDate(1, today);
+			pstmt.setDate(2, today);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				taxAmount = rs.getFloat("tax_amount");
+			}
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return taxAmount;
+		
+	}
 
-	public String updatePayment(String cardType,
+	public String updatePayment(int paymentId,
+								String cardType,
 								int cardNumber,
 								String nameOnCard,
 								int cvc,
 								Date expireDate,
 								double subAmount,
+								String status,
 								Date paymentDate,
 								int taxId,
 								int appointmenetId){
 			
 			try(Connection con = DBConnector.getConnection()) {
-			String updateQuery = "update payment set cardType =?, cardNumber =?, nameOnCard =?, cvc =?, expireDate =?, subAmount =?, paymentDate =?, taxId =?, appointmenetId =?" +
-						 "where appointmenetId =?" ;
+			String updateQuery = "update payment set "
+					+ "card_type=?, "
+					+ "card_number=?, "
+					+ "name_on_card=?, "
+					+ "cvc=?, "
+					+ "expire_date=?, "
+					+ "status=?, "
+					+ "sub_amount=?, "
+					+ "date=?, "
+					+ "tax_tax_id=? , "
+					+ "appoinment_appoinment_id=? " 
+					+ "where payment_id = ?;" ;
 						
 			PreparedStatement pstmt = con.prepareStatement(updateQuery);
 			pstmt.setString(1,cardType);
@@ -188,14 +223,16 @@ public class Payment {
 			pstmt.setString(3,nameOnCard);
 			pstmt.setInt(4,cvc);
 			pstmt.setDate(5,expireDate);
-			pstmt.setDouble(6,subAmount);
-			pstmt.setDate(7,paymentDate);
-			pstmt.setInt(8,taxId);
-			pstmt.setInt(9,appointmenetId);
+			pstmt.setString(6,status);
+			pstmt.setDouble(7,subAmount);
+			pstmt.setDate(8,paymentDate);
+			pstmt.setInt(9,taxId);
+			pstmt.setInt(10,appointmenetId);
+			pstmt.setInt(11,paymentId);
 			pstmt.executeUpdate();
 			con.close();
 	
-			return "Payment updated Successfully";
+			return "Payment updated successfully....";
 			}
 			catch(SQLException e){
 				return "Error occur during updating \n" +

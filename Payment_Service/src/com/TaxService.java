@@ -46,6 +46,7 @@ public class TaxService {
     	
         return this.tax.updateTaxEntryById(id, amount, validFrom, validTo );
     }
+    
     @DELETE
     @Path("/delete")
     @Produces(MediaType.TEXT_PLAIN)
