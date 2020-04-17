@@ -5,11 +5,13 @@ import java.sql.*;
 
 public class Tax {
 	
-	public String addTaxEntry(float amount) {
+	public String addTaxEntry(float amount, Date validFrom, Date validTo) {
 		try (Connection con = DBConnector.getConnection()) {
-			String insertQuery = "insert into tax values (NULL, ?)";
+			String insertQuery = "insert into tax values (NULL, ?, ?, ?)";
 			PreparedStatement pstmt = con.prepareStatement(insertQuery);
 			pstmt.setFloat(1, amount);
+			pstmt.setDate(2, validFrom);
+			pstmt.setDate(3, validTo);
 			pstmt.execute();
 			con.close();
 			
@@ -28,14 +30,20 @@ public class Tax {
             String output = "<table border=\"1\">" +
                     "<tr>" +
                     "<th>Tax ID</th>" +
-                    "<th>Tax amount</th>";
+                    "<th>Tax amount</th>" +
+                    "<th>Valid From</th>" +
+                    "<th>Valid To</th>";
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 int taxId = rs.getInt("tax_id");
                 float taxAmount = rs.getFloat("tax_amount");
+                Date validFrom = rs.getDate("valid_from");
+                Date validTo = rs.getDate("valid_to");
 
                 output += "<tr><td>" + taxId + "</td>";
                 output += "<td>" + taxAmount + "</td>";
+                output += "<td>" + validFrom + "</td>";
+                output += "<td>" + validTo + "</td>";
 
             }
             output += "</table>";
@@ -56,14 +64,20 @@ public class Tax {
             String output = "<table border=\"1\">" +
                     "<tr>" +
                     "<th>Tax ID</th>" +
-                    "<th>Tax amount</th>";
+                    "<th>Tax amount</th>" +
+                    "<th>Valid From</th>" +
+                    "<th>Valid To</th>";
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 int taxId = rs.getInt("tax_id");
                 float taxAmount = rs.getFloat("tax_amount");
+                Date validFrom = rs.getDate("valid_from");
+                Date validTo = rs.getDate("valid_to");
 
                 output += "<tr><td>" + taxId + "</td>";
                 output += "<td>" + taxAmount + "</td>";
+                output += "<td>" + validFrom + "</td>";
+                output += "<td>" + validTo + "</td>";
 
             }
             output += "</table>";
@@ -76,15 +90,21 @@ public class Tax {
         }
     }
 	
-	 public String updateTaxEntryById(int id, float amount){
+	 public String updateTaxEntryById(int id, float amount,Date validFrom,Date validTo){
         try(Connection con  = DBConnector.getConnection()) {
-            String updateQuery = "update tax set tax_amount = ? where tax_id = ?";
+            String updateQuery = "update tax set tax_amount = ? ,"
+            		+ "valid_from =? ,"
+            		+ "valid_to= ? "
+            		+ "where tax_id = ?";
             PreparedStatement pstmt = con.prepareStatement(updateQuery);
-            pstmt.setInt(2, id);
+           
             pstmt.setFloat(1, amount);
+            pstmt.setDate(2, validFrom);
+            pstmt.setDate(3, validTo);
+            pstmt.setInt(4, id);
             pstmt.executeUpdate();
             con.close();
-            return "Tax entry updated successfully";
+            return "Tax entry updated successfully....";
         }
         catch (SQLException e){
             return "Error occur during updating \n" +
@@ -123,7 +143,7 @@ public class Tax {
 	                pstmt.setInt(1, id);
 	                pstmt.execute();
 	                con.close();
-	                return "Tax entry deleted successfully";
+	                return "Tax entry deleted successfully....";
 	            }
 
 	        }

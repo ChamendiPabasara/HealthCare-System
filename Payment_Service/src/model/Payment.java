@@ -10,8 +10,16 @@ import config.DBConnector;
 
 public class Payment {
 
-	public String addPayment(String cardType, int cardNumber, String nameOnCard, int cvc, Date expireDate,
-			String status, double subAmount, Date paymentDate, int taxId, int appointmentId) {
+	public String addPayment(String cardType, 
+							 int cardNumber, 
+							 String nameOnCard, 
+							 int cvc, 
+							 Date expireDate,
+							 String status, 
+							 double subAmount, 
+							 Date paymentDate, 
+							 int taxId, 
+							 int appointmentId) {
 
 		try (Connection con = DBConnector.getConnection()) {
 			String insertQuery = " insert into payment values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
@@ -44,8 +52,15 @@ public class Payment {
 					+ "join hospital h on a.hospital_hosp_id = h.hosp_id\n" + "where patient_id = ?;";
 			PreparedStatement pstmnt = con.prepareStatement(getQuery);
 			pstmnt.setInt(1, id);
-			String output = "<table>" + "<tr>" + "<th>Payment ID</th>" + "<th>Patient Name</th>"
-					+ "<th>Payment Date</th>" + "<th>Amount</th>" + "<th>Doctor</th>" + "<th>Hospital</th>";
+			String output = "<table>" + 
+							"<tr>" + 
+							"<th>Payment ID</th>" + 
+							"<th>Patient Name</th>" + 
+							"<th>Payment Date</th>" + 
+							"<th>Amount</th>" + 
+							"<th>Doctor</th>" + 
+							"<th>Hospital</th>";
+			
 			ResultSet rs = pstmnt.executeQuery();
 
 			while (rs.next()) {
