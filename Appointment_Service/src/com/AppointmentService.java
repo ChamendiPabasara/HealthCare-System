@@ -33,41 +33,53 @@ public class AppointmentService {
 		
 		return App1.ReadAppointments();
 	}
+	
+	@GET
+	@Path("/getAppointmentbyID")
+	@Produces(MediaType.TEXT_HTML)
+	public String getPayment(@QueryParam("id") int id) {
+
+		return this.App1.getAppointmentByPatient(id);
+	}	
 
 	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addAppointment(
-			@FormParam("appoinment_id ") int AppID,
 			@FormParam("date") Date day, 
 			@FormParam("time") String time,
 			@FormParam("patient_patient_id") int pid, 
 			@FormParam("doctor_doc_id") int did,
 			@FormParam("hospital_hosp_id") int hosID) 
 	{
-		String output = App1.addAppointment(AppID,day, time, pid, did, hosID);
+		String output = App1.addAppointment(day, time, pid, did, hosID);
 		return output;
 	}
 	
 	
 	@PUT
-	@Path("/update") 
+	@Path("/update/App1/{appoinment_id}/") 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String UpdateAppointment(@FormParam("date") Date day, @FormParam("time") String time,
-			@FormParam("doctor_doc_id") int did,
-			@FormParam("hospital_hosp_id") int hosID) 
+	public String UpdateAppointment(
+			
+			@FormParam("date") Date day, 
+			@FormParam("time") String time,
+			@PathParam("appoinment_id") int AppID
+			) 
 	{
-		String output = App1.UpdateAppointment(day, time, did, hosID);
+		String output = App1.UpdateAppointment(day,time,AppID);
+		System.out.println(AppID);
 		return output;
 	}
 	
 	@DELETE
-	@Path("/delete")
+	@Path("/delete/App1/{appoinment_id}/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String DeleteAppointment(@FormParam ("appoinment_id") Integer AppID )
+	public String DeleteAppointment(
+			@PathParam ("appoinment_id") int AppID )
 	{
 	
 	//Read the value from the element <AppID>

@@ -11,26 +11,19 @@ import config.DBConnector;
 
 public class Appointment {
 
-public String addAppointment( int AppID,Date day, String time, int pid,int did,int hosID) {
+public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 		
 		try(Connection con  = DBConnector.getConnection()){
 			
-			/*String patient = "select patient_id from patient where p_fname =? AND p_lname=?";
-			String doctor = "select doc_id from doctor where doc_fname =? AND doc_lname=?";
-			String hospital = "select hosp_id	 from hospital where hosp_name =?";
 			
-			int pid = Integer.parseInt(patient);
-			int did = Integer.parseInt(doctor);
-			int hid = Integer.parseInt(hospital);*/
-			
-			String insertAppQuery = " insert into appoinment values (?,?, ?, ?, ?, ?)";
+			String insertAppQuery = " insert into appoinment values (NULL,?, ?, ?, ?, ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertAppQuery);
-			pstmnt.setInt(1,AppID);
-			pstmnt.setDate(2,day);
-			pstmnt.setString(3,time);
-			pstmnt.setInt(4,pid);
-			pstmnt.setInt(5,did);
-			pstmnt.setInt(6,hosID);
+			////pstmnt.setInt(1,0);
+			pstmnt.setDate(1,day);
+			pstmnt.setString(2,time);
+			pstmnt.setInt(3,pid);
+			pstmnt.setInt(4,did);
+			pstmnt.setInt(5,hosID);
 			
 			
 			
@@ -57,14 +50,13 @@ public String getAppointmentByPatient(int id) {
 		PreparedStatement pstmnt = con.prepareStatement(getAppQuery);
 		pstmnt.setInt(1, id);
 		
-		String output = "<table>" +
-				"<tr>" +
-				"<th>Payment ID</th>" +
-				"<th>Patient Name</th>" +
-				"<th>Payment Date</th>" +
-				"<th>Amount</th>" +
-				"<th>Doctor</th>" +
-				"<th>Hospital</th>";
+		String output = "<table border=\"1\"><tr><th>Appointment ID</th>"+
+		 		"<th>Appointment Date</th> "+
+		 		"<th>Appointment Time</th>"
+		 		+ "<th>Patient</th>"
+		 		+"<th>Doctor</th>"
+		 		+"<th>Hospital</th>"
+		 		+ "<th>Update</th><th>Remove</th></tr>";
 		
 		ResultSet rs = pstmnt.executeQuery();
 		while(rs.next()) {
@@ -101,10 +93,6 @@ public String ReadAppointments() {
 	
 	try(Connection con  = DBConnector.getConnection()){
 		
-		/*String patient = "select p_fname,p_lname from patient where patient_id=?";
-		String doctor = "select doc_fname,doc_lname from doctor where doc_id=?";
-		String hospital = "select hosp_name	 from hospital where hosp_id =?";
-		*/
 		
 		LocalDate prvPaymentDate = null;
 		String readQuery = "select * from appoinment";
@@ -118,15 +106,6 @@ public String ReadAppointments() {
 				 		+"<th>Doctor ID</th>"
 				 		+"<th>Hospital ID</th>"
 				 		+ "<th>Update</th><th>Remove</th></tr>"; 
-		 
-			/*String output = "<table>" +
-					"<tr>" +
-					"<th>Appointment ID</th>" +
-					"<th>Appointment Date</th>" +
-					"<th>Appointment Time</th>" +
-					"<th>Patient ID</th>" +
-					"<th>Doctor ID</th>" +
-					"<th>Hospital ID</th>";*/
 			
 		 ResultSet rs = pstmt.executeQuery(readQuery); 
 		
@@ -160,27 +139,20 @@ public String ReadAppointments() {
 	}
 }
 
-public String UpdateAppointment( Date day, String time,int did,int hosID) {
+public String UpdateAppointment(Date day,String time,int AppID) {
 	
 	try(Connection con  = DBConnector.getConnection()){
 		
-	
-		/*String doctor = "select doc_id from doctor where doc_fname =? AND doc_lname=?";
-		String hospital = "select hosp_id	 from hospital where hosp_name =?";
 		
-		
-		int did = Integer.parseInt(doctor);
-		int hid = Integer.parseInt(hospital);*/
-		
-		String updateAppQuery =  "UPDATE appoinment SET date=?,time=?,doctor_doc_id=?,hospital_hosp_id=? WHERE appoinment_id=?"; 
+		String updateAppQuery =  "UPDATE appoinment SET date=?,time=? WHERE appoinment_id=?"; 
 		PreparedStatement pstmnt = con.prepareStatement(updateAppQuery);
 		pstmnt.setDate(1, day);
 		pstmnt.setString(2, time);
-		pstmnt.setInt(3, did);
-		pstmnt.setInt(4, hosID);
+		pstmnt.setInt(3, AppID);
 		
-
-		pstmnt.execute();
+		
+         System.out.println(pstmnt.toString());
+         pstmnt.execute();
 		return "Apointment Updated successfully...";
 	}
 	catch(SQLException e){
