@@ -13,7 +13,7 @@ public class Tax {
 			pstmt.execute();
 			con.close();
 			
-			return "Tax entry added successfully....";
+			return "Tax entry added successfully";
 			
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
