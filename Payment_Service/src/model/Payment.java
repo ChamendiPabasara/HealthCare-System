@@ -29,7 +29,7 @@ public class Payment {
 			pstmnt.setInt(10, appointmentId);
 
 			pstmnt.execute();
-			return "Payment added successfully...";
+			return "Payment added Successfully";
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
 		}
@@ -180,7 +180,7 @@ public class Payment {
 			pstmt.executeUpdate();
 			con.close();
 	
-			return "Payment updated successfully....";
+			return "Payment updated Successfully";
 			}
 			catch(SQLException e){
 				return "Error occur during updating \n" +
