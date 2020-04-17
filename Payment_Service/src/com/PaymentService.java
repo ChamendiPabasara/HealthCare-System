@@ -31,11 +31,18 @@ public class PaymentService {
 	}
 	
 	@GET
-	@Path("/get")
+	@Path("/getById")
 	@Produces(MediaType.TEXT_HTML)
-	public String getPayment(@QueryParam("id") int id) {
+	public String getPaymentById(@QueryParam("id") int id) {
 
 		return this.payment.getPaymentByPatient(id);
-	}	
+	}
+	
+	@GET
+    @Path("/get")
+    @Produces(MediaType.TEXT_HTML)
+    public String getAllPatmentEntry(){
+        return this.payment.getAllPayment();
+    }	
 
 }
