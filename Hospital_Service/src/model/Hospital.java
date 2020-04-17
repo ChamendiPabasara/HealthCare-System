@@ -128,21 +128,34 @@ public class Hospital {
 					String hospRegDate = rs.getString("hosp_reg_date");
 					String hospCharge = Float.toString(rs.getFloat("hosp_charge"));
 					
-					output += "<tr><td>" + hospName + "</td>";
+				/*	output += "<tr><td>" + hospName + "</td>";
 					output += "<td>" + hospAddress + "</td>";
 					output += "<td>" + hospEmail + "</td>";
 					output += "<td>" + hospPhone + "</td>";
 					output += "<td>" + hospRegDate + "</td>";
 					output += "<td>" + hospCharge + "</td>";
 					
-					output += "<td>"
-							+ "<input name=\"btnUpdate\" type=\"button\"value=\"Update\" class=\"btn btn-secondary\">"
-							+ "</td>\r\n" + "<td>" + "<form method=\"get\" action=\"Items.jsp\">"
-							+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">"
-							+ "<input name=\"itemID\" type=\"hidden\" value=\"" + hospID + "\">" + "</form>" + "</td>"
-							+ "</tr>";
+					*/
+					
+					
+					// buttons
+					output += "<tr><td><input id=\"hidHospIDUpdate\" name=\"hidHospIDUpdate\" type=\"hidden\" value=\"" + hospID + "\">" + hospName + "</td>";
+					output += "<td>" + hospAddress + "</td>";
+					output += "<td>" + hospEmail + "</td>";
+					output += "<td>" + hospPhone + "</td>";
+					output += "<td>" + hospRegDate + "</td>";
+					output += "<td>" + hospCharge + "</td>";
+					
+					// buttons
+					output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\" class=\" btnUpdate btn btn-secondary\">"
+							+ "</td><td><form method=\"post\" action=\"hospitals.jsp\">"
+							+ "<input name=\"btnRemove\" type=\"submit\"value=\"Remove\" class=\"btn btn-danger\">"
+							+ "<input name=\"hidHospIDDelete\" type=\"hidden\"value=\""
+							+ hospID + "\">" + "</form></td></tr>";
+					
 				}
-
+				con.close();
+				output += "</table>";
 			}
 		} catch (Exception e) {
 			output = "Error while reading";
@@ -150,4 +163,5 @@ public class Hospital {
 		}
 		return output;
 	}
+	
 }
