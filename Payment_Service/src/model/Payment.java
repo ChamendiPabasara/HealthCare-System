@@ -70,6 +70,63 @@ public class Payment {
 			return "Error occur during retrieving \n" + e.getMessage();
 		}
 	}
+	
+	public String getAllPayment(){
+        try(Connection con  = DBConnector.getConnection()) {
+            String getQuery = "select * from payment";
+            PreparedStatement pstmt = con.prepareStatement(getQuery);
+
+            String output = "<table border=\"1\">" +
+                    "<tr>" +
+					"<th>Payment Id</th>" +
+                    "<th>Card Type</th>" +
+					"<th>Card Number</th>" +
+					"<th>Name On Card</th>" +
+					"<th>cvc</th>" +
+					"<th>Expire Date</th>" +
+					"<th>Status</th>" +
+					"<th>Sub Amount</th>" +
+                    "<th>Payment Date</th>" +
+					"<th>Tax Id</th>" +
+					"<th>Appointment Id</th>" ;
+					
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+				int paymentId = rs.getInt("payment_id");
+				String cardType = rs.getString("card_type");
+                int cardNumber = rs.getInt("card_number");
+				String nameOnCard = rs.getString("name_on_card");
+				int cvc = rs.getInt("cvc");
+				Date expireDate = rs.getDate("expire_date");
+				String status = rs.getString("status");
+				float subAmount = rs.getFloat("sub_amount");
+				Date paymentDate = rs.getDate("date");
+				int taxId = rs.getInt("tax_tax_id");
+                int appointmentId = rs.getInt("appoinment_appoinment_id");
+
+                output += "<tr><td>" + paymentId + "</td>";
+                output += "<td>" + cardType + "</td>";
+                output += "<td>" + cardNumber + "</td>";
+				output += "<td>" + nameOnCard + "</td>";
+				output += "<td>" + cvc + "</td>";
+				output += "<td>" + expireDate + "</td>";
+				output += "<td>" + status + "</td>";
+				output += "<td>" + subAmount + "</td>";
+				output += "<td>" + paymentDate + "</td>";
+				output += "<td>" + taxId + "</td>";
+				output += "<td>" + appointmentId + "</td>";
+
+            }
+            output += "</table>";
+            con.close();
+            return output;
+        }
+        catch (SQLException e){
+            return "Error occur during retrieving \n" +
+                    e.getMessage();
+        }
+    }
+
 
 	public double calculateSubAmount(int appointmentId) {
 		double subAmount = 0;
