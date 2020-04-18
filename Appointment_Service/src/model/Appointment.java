@@ -40,12 +40,12 @@ public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 public String getAppointmentByPatient(int id) {
 	
 	try(Connection con  = DBConnector.getConnection()){
-		String getAppQuery = "select a.appoinment_id, p.p_fname, p.p_lname, a.date, a.time, d.doc_fname, d.doc_lname, h.hosp_name from appoinment a \n" +
-				"join patient p on a.patient_patient_id = p.patient_id \n" +
-				"join payment py on a.appoinment_id = py.appoinment_appoinment_id\n" +
-				"join doctor d on a.doctor_doc_id = d.doc_id\n" +
-				"join hospital h on a.hospital_hosp_id = h.hosp_id\n" +
-				"where patient_id = ?;";
+		String getAppQuery = "select a.appoinment_id, p.p_fname, p.p_lname,"
+				+ " a.date, a.time, d.doc_fname, d.doc_lname, h.hosp_name "
+				+ "from appoinment a "
+				+ "join patient p on a.patient_patient_id = p.patient_id "
+				+ "join doctor d on a.doctor_doc_id = d.doc_id "
+				+ "join hospital h on a.hospital_hosp_id = h.hosp_id where patient_id = ?";
 		
 		PreparedStatement pstmnt = con.prepareStatement(getAppQuery);
 		pstmnt.setInt(1, id);
@@ -53,10 +53,9 @@ public String getAppointmentByPatient(int id) {
 		String output = "<table border=\"1\"><tr><th>Appointment ID</th>"+
 		 		"<th>Appointment Date</th> "+
 		 		"<th>Appointment Time</th>"
-		 		+ "<th>Patient</th>"
-		 		+"<th>Doctor</th>"
-		 		+"<th>Hospital</th>"
-		 		+ "<th>Update</th><th>Remove</th></tr>";
+		 		+ "<th>Patient Name </th>"
+		 		+"<th>Doctor Name</th>"
+		 		+"<th>Hospital Name</th>" ;
 		
 		ResultSet rs = pstmnt.executeQuery();
 		while(rs.next()) {
@@ -83,8 +82,6 @@ public String getAppointmentByPatient(int id) {
 		return "Error occur during retrieving \n" +
 				e.getMessage();
 	}
-	
-	
 	
 }
 

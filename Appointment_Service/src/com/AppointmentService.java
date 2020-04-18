@@ -35,9 +35,10 @@ public class AppointmentService {
 	}
 	
 	@GET
-	@Path("/getAppointmentbyID")
+	@Path("/getAppointmentbyID/App1/{id}")
 	@Produces(MediaType.TEXT_HTML)
-	public String getPayment(@QueryParam("id") int id) {
+	public String getPayment(@PathParam("id") int id) {
+		System.out.println(id);
 
 		return this.App1.getAppointmentByPatient(id);
 	}	
@@ -59,7 +60,7 @@ public class AppointmentService {
 	
 	
 	@PUT
-	@Path("/update/App1/{appoinment_id}/") 
+	@Path("/update/App1/{appoinment_id}") 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String UpdateAppointment(
@@ -70,7 +71,7 @@ public class AppointmentService {
 			) 
 	{
 		String output = App1.UpdateAppointment(day,time,AppID);
-		System.out.println(AppID);
+		//System.out.println(AppID);
 		return output;
 	}
 	
