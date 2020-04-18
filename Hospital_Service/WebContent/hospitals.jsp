@@ -28,6 +28,7 @@
 					request.getParameter("hospRegDate"), 
 					request.getParameter("hospCharge"));
 		}
+		session.setAttribute("statusMsg", stsMsg);
 	}
 	//Deelete existing hosptal
 	if(request.getParameter("hidHospIDDelete") != null){
@@ -49,6 +50,10 @@
 <script src="Component/jquery-3.5.0.min.js"></script>
 <script src="Component/hospitals.js"></script>
 
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 </head>
 <body>
 
@@ -58,9 +63,9 @@
 			<form id="formHospital" name="formHospital" method="post" action="hospitals.jsp">
 				Hospital Name: <input id="hospName" name="hospName" type="text" class="form-control form-control-sm"> <br> 
 				Hospital Address: <input id="hospAddr" name="hospAddr" type="text" class="form-control form-control-sm"> <br> 
-				Hospital Email: <input id="hospEmail" name="hospEmail" type="text" class="form-control form-control-sm"> <br> 
-				Hospital Phone no: <input id="hospPhone" name="hospPhone" type="text" class="form-control form-control-sm"> <br>
-				Hospital Registered Date: <input id="hospRegDate" name="hospRegDate" type="text" class="form-control form-control-sm"> <br>
+				Hospital Email: <input id="hospEmail" name="hospEmail" type="email" class="form-control form-control-sm" placeholder="example@gmail.com"> <br> 
+				Hospital Phone no: <input id="hospPhone" name="hospPhone" type="text" class="form-control form-control-sm" placeholder="000 000 0000"> <br>
+				Hospital Registered Date: <input id="hospRegDate" name="hospRegDate" type="text" class="form-control form-control-sm" placeholder="dd-MM-yyyy"> <br>
 				Hospital Charge: <input id="hospCharge" name="hospCharge" type="text" class="form-control form-control-sm"> <br>
 				 
 				<input id="btnSave" name="btnSave" type="button" value="Save" class="btn btn-primary"> 

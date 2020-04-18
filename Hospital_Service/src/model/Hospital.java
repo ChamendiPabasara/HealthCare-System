@@ -128,15 +128,6 @@ public class Hospital {
 					String hospRegDate = rs.getString("hosp_reg_date");
 					String hospCharge = Float.toString(rs.getFloat("hosp_charge"));
 					
-				/*	output += "<tr><td>" + hospName + "</td>";
-					output += "<td>" + hospAddress + "</td>";
-					output += "<td>" + hospEmail + "</td>";
-					output += "<td>" + hospPhone + "</td>";
-					output += "<td>" + hospRegDate + "</td>";
-					output += "<td>" + hospCharge + "</td>";
-					
-					*/
-					
 					
 					// buttons
 					output += "<tr><td><input id=\"hidHospIDUpdate\" name=\"hidHospIDUpdate\" type=\"hidden\" value=\"" + hospID + "\">" + hospName + "</td>";
