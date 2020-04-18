@@ -23,18 +23,17 @@ public class PaymentService {
 						   @FormParam("expireDate") Date expireDate,
 						   @FormParam("status") String status,
 						   @FormParam("paymentDate") Date paymentDate,
-						   @FormParam("taxId") int taxId,
 						   @FormParam("appointmentId") int appointmentId) {
-		return this.payment.addPayment(cardType, cardNumber, nameOnCard, cvc, expireDate, status, paymentDate, taxId, appointmentId);	
+		return this.payment.addPayment(cardType, cardNumber, nameOnCard, cvc, expireDate, status, paymentDate, appointmentId);	
 	}
 	
 	
 	@GET
 	@Path("/getById")
 	@Produces(MediaType.TEXT_HTML)
-	public String getPaymentById(@QueryParam("id") int id) {
+	public String getPaymentById(@QueryParam("patientId") int patientId) {
 
-		return this.payment.getPaymentByPatient(id);
+		return this.payment.getPaymentByPatient(patientId);
 	}
 	
 	

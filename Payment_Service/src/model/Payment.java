@@ -1,10 +1,12 @@
 package model;
 
 import java.sql.Connection;
+import javafx.util.Pair; 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import config.DBConnector;
 
@@ -16,15 +18,15 @@ public class Payment {
 							 int cvc, 
 							 Date expireDate,
 							 String status, 
-							 Date paymentDate, 
-							 int taxId, 
+							 Date paymentDate,  
 							 int appointmentId) {
 
 		try (Connection con = DBConnector.getConnection()) {
 			String insertQuery = " insert into payment values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertQuery);
 
-			double subAmount = this.calculateSubAmount(appointmentId);
+			double subAmount = this.calculateSubAmount(appointmentId, paymentDate);
+			int taxId = this.getValidTax(paymentDate).getKey();
 			pstmnt.setString(1, cardType);
 			pstmnt.setInt(2, cardNumber);
 			pstmnt.setString(3, nameOnCard);
@@ -37,7 +39,7 @@ public class Payment {
 			pstmnt.setInt(10, appointmentId);
 
 			pstmnt.execute();
-			return "Payment added successfully...";
+			return "Payment added successfully";
 		} catch (SQLException e) {
 			return "Error occur during adding\n" + e.getMessage();
 		}
@@ -141,7 +143,7 @@ public class Payment {
         }
     }
 
-	public double calculateSubAmount(int appointmentId) {
+	public double calculateSubAmount(int appointmentId, Date paymentDate) {
 		double subAmount = 0;
 		try (Connection con = DBConnector.getConnection()) {
 			String getQuery = "select h.hosp_charge,d.doc_charge\n" + "from appoinment a\n"
@@ -152,10 +154,9 @@ public class Payment {
 			pstmt.setInt(1, appointmentId);
 			ResultSet rs = pstmt.executeQuery();
 
-			Date today = new Date(System.currentTimeMillis());
 			float docCharge = 0;
 			float hospCharge = 0;
-			float taxAmount = getValidTax(today);
+			float taxAmount = getValidTax(paymentDate).getValue();
 			while (rs.next()) {
 				docCharge = rs.getFloat("doc_charge");
 				hospCharge = rs.getFloat("hosp_charge");
@@ -170,10 +171,13 @@ public class Payment {
 
 	}
 	
-	public float getValidTax(Date today) {
+	@SuppressWarnings("restriction")
+	public Pair<Integer, Float> getValidTax(Date today) {
 		float taxAmount = 0;
+		int taxId = 0;
+		Pair<Integer, Float> pair = new Pair(0,0);
 		try(Connection con = DBConnector.getConnection()) {
-			String searchQuey = "select tax_amount from tax "
+			String searchQuey = "select tax_id, tax_amount from tax "
 					+ "where valid_from < ?"
 					+ "and valid_to > ?";
 			PreparedStatement pstmt = con.prepareStatement(searchQuey);
@@ -181,13 +185,15 @@ public class Payment {
 			pstmt.setDate(2, today);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
+				taxId = rs.getInt("tax_id");
 				taxAmount = rs.getFloat("tax_amount");
+				pair = new Pair(taxId, taxAmount);
 			}
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return taxAmount;
+		return pair;
 		
 	}
 
