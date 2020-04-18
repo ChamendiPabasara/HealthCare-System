@@ -76,7 +76,7 @@ public class AppointmentService {
 	}
 	
 	@DELETE
-	@Path("/delete/App1/{appoinment_id}/")
+	@Path("/delete/App1/{appoinment_id}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String DeleteAppointment(
