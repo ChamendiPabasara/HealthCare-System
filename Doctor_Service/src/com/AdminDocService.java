@@ -1,6 +1,7 @@
 package com;
 
 import model.AdminDoc;
+
 import view.ViewDoctor;
 
 import java.sql.Time;
@@ -87,8 +88,10 @@ AdminDoc docObj = new AdminDoc();
 	@Produces(MediaType.APPLICATION_JSON)
 	public ViewDoctor ShowDoctortByDocId(@PathParam("doc_id") int id) {
 					
-		return docObj.ShowDoctortByDocId(id);
+		return docObj.ShowDoctorByDocId(id);
 	
 	}
+	
+	
 
 }

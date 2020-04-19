@@ -1,18 +1,16 @@
 package com;
 
-import model.Doctor;
-
-import view.DoctorAppointment;
-import view.ViewDoctor;
+//For REST Service 
+import javax.ws.rs.*; 
+import javax.ws.rs.core.MediaType;
 
 import java.sql.Time;
 
-//For REST Service 
-import javax.ws.rs.*; 
-import javax.ws.rs.core.MediaType; 
-
 //For JSON 
-import com.google.gson.*; 
+import com.google.gson.*;
+
+import model.Doctor;
+import view.DoctorAppointment;
 
 //For XML 
 import org.jsoup.*; 
@@ -42,13 +40,11 @@ Doctor docObj = new Doctor();
 		String lname = docObject.get("doc_lname").getAsString(); 
 		String email = docObject.get("doc_email").getAsString();
 		String gender = docObject.get("doc_gender").getAsString();
-		String liscen = docObject.get("liscen_no").getAsString();
-		String special = docObject.get("specialization").getAsString();
 		String phone = docObject.get("phone").getAsString();
 		String charge = docObject.get("doc_charge").getAsString();
-		String userId = docObject.get("user_user_id").getAsString();
+		
 		 
-		String output = docObj.updateDoctor(d_id, nic, fname, lname, email, gender, liscen, special, phone, charge, userId); 
+		String output = docObj.updateDoctor(d_id, nic, fname, lname, email, gender, phone, charge); 
 		 
 		return output; 
 	}
@@ -63,6 +59,12 @@ Doctor docObj = new Doctor();
 				return docObj.ShowAppointmentByDocId(id);
 			}
 			
-	   
-	
+			@GET
+			@Path("/getHop")
+			@Produces(MediaType.TEXT_HTML)
+			public String readItems() {
+				return docObj.viewHospitals();
+			}
+			
+			
 }

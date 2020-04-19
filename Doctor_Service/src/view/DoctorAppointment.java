@@ -1,6 +1,8 @@
 package view;
 
 
+import java.sql.Time;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.JsonObject;
@@ -11,12 +13,10 @@ import com.google.gson.JsonParser;
 
 public class DoctorAppointment {
 	
-	
-
 	int DID;
 	private int appointment_Id;
 	private String date;
-	private String time;
+	private Time time;
 	private int patient_Id;
 	private int hospital_Id;
 	
@@ -24,7 +24,7 @@ public class DoctorAppointment {
 	public DoctorAppointment() {}
 	
 	
-	public DoctorAppointment(int appointment_Id, String date, String time, int patient_Id, int hospital_Id) {
+	public DoctorAppointment(int appointment_Id, String date, Time time, int patient_Id, int hospital_Id) {
 	
 		this.appointment_Id = appointment_Id;
 		this.date = date;
@@ -54,12 +54,12 @@ public class DoctorAppointment {
 	}
 
 
-	public String getTime() {
+	public Time getTime() {
 		return time;
 	}
 
 
-	public void setTime(String time) {
+	public void setTime(Time time) {
 		this.time = time;
 	}
 

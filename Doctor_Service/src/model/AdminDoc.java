@@ -1,3 +1,4 @@
+
 package model;
 
 import java.sql.Connection;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.DBConnector;
+import view.DoctorAppointment;
+
 import view.ViewDoctor;
 
 public class AdminDoc {
@@ -24,7 +27,7 @@ public class AdminDoc {
 			}
 
 			// Prepare the html table to be displayed
-			output = "<table border=\"1\"><tr><th>D_ID</th><th>D_NIC</th><th>D_fname</th><th>D_lanme</th><th>D_email</th><th>D_gender</th><th>Liscen_No</th><th>D_specialization</th><th>D_phone</th><th>D_charge</th><th>User_ID</th><th>Update</th><th>Remove</th></tr>";
+			output = "<table border=\"1\"><tr><th>D_ID</th><th>D_NIC</th><th>D_fname</th><th>D_lanme</th><th>D_email</th><th>D_gender</th><th>Liscen_No</th><th>D_specialization</th><th>D_phone</th><th>D_charge</th><th>User_ID</th><th>Remove</th></tr>";
 
 			String query = "SELECT * FROM doctor";
 			Statement stmt = con.createStatement();
@@ -58,10 +61,9 @@ public class AdminDoc {
 				output += "<td>" + uid + "</td>";
 
 				// buttons
-				output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\"  class=\" btnUpdate btn btn-secondary\"></td>"
-						+ "<td><form method=\"post\" action=\"index.jsp\"> "
+				output += "<td><form method=\"post\" action=\"insertDoctor.jsp\"> "
 						+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\"> "
-						+ "<input name=\"hidItemIDDelete\" type=\"hidden\" value=\"" +  id + "\">" + "</form></td></tr>";
+						+ "<input name=\"hidDocIDDelete\" type=\"hidden\" value=\"" +  id + "\">" + "</form></td></tr>";
 			}
 
 			con.close();
@@ -101,15 +103,15 @@ public class AdminDoc {
 			preparedStmt.setString(6, gender);
 			preparedStmt.setString(7, liscen);
 			preparedStmt.setString(8, special);
-			preparedStmt.setInt(9, Integer.parseInt(phone));
-			preparedStmt.setDouble(10, Double.parseDouble(charge));
+			preparedStmt.setString(9, phone);
+			preparedStmt.setFloat(10, Float.parseFloat(charge));
 			preparedStmt.setString(11, userId);
 
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
 
-			output = "Inserted successfully";
+			output = "Inserted Doctor Successfully";
 		} catch (Exception e) {
 			output = "Error while inserting the doctor.";
 			System.err.println(e.getMessage());
@@ -139,7 +141,7 @@ public class AdminDoc {
 			preparedStmt.execute();
 			con.close();
 
-			output = "Deleted successfully";
+			output = "Deleted doctor successfully";
 		} catch (Exception e) {
 			output = "Error while deleting the doctor.";
 			System.err.println(e.getMessage());
@@ -186,7 +188,7 @@ public class AdminDoc {
 	} 
 
 	//show the type by DocID
-			public ViewDoctor ShowDoctortByDocId(int id) {
+			public ViewDoctor ShowDoctorByDocId(int id) {
 			List<ViewDoctor> list = viewDoctor(id);
 				if(!list.isEmpty()) {
 					return	list.get(0);
@@ -229,7 +231,7 @@ public class AdminDoc {
 													results.getString("doc_gender"),
 													results.getString("liscen_no"),
 													results.getString("specialization"),
-													results.getInt("phone"),
+													results.getString("phone"),
 													results.getFloat("doc_charge"),
 													results.getInt("user_user_id")
 												);
@@ -244,7 +246,7 @@ public class AdminDoc {
 					
 					return DoctorList;
 				}
-
-	
-
+				
+				
+				
 }

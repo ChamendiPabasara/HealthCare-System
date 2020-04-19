@@ -19,7 +19,7 @@ public class ViewDoctor {
 	private String gender;
 	private String liscen;
 	private String special;
-	private int phone;
+	private String phone;
 	private float charge;
 	private int userId;
 	
@@ -27,7 +27,7 @@ public class ViewDoctor {
 	public ViewDoctor() {}
 	
 	
-	public ViewDoctor(int doc_id, String nic, String fname, String lname, String email, String gender, String liscen, String special, int phone, float charge, int userId) 
+	public ViewDoctor(int doc_id, String nic, String fname, String lname, String email, String gender, String liscen, String special, String phone, float charge, int userId) 
 	{
 		
 		this.doc_id = doc_id;
@@ -134,12 +134,12 @@ public class ViewDoctor {
 	}
 
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
