@@ -155,4 +155,91 @@ public class Hospital {
 		return output;
 	}
 	
+	public String getHospitalDetailsByID(String hospID) {
+		String output = "";
+		
+		try (Connection con = DBConnector.getConnection()){
+			
+				if(con ==  null) {
+					return "Error while connecting to the database";
+				} else {
+					String query = "select * from hospital where hosp_id=?";
+					PreparedStatement preparedStmt = con.prepareStatement(query);
+					preparedStmt.setInt(1, Integer.parseInt(hospID));
+					
+					output = "<table border=\"1\">"
+							+ "<tr><th>Hospital Name</th><th>Hospital Address</th><th>Hospital Email</th>"
+							+ "<th>Hospital Phone</th><th>Hospital Registered date</th><th>Hospital Charge</th></tr>";
+					
+					
+					ResultSet rs = preparedStmt.executeQuery();
+					
+					while(rs.next()) {
+						String hospName = rs.getString("hosp_name");
+						String hospAddress = rs.getString("hosp_address");
+						String hospEmail = rs.getString("hosp_email");
+						String hospPhone = rs.getString("hosp_phone");
+						String hospRegDate = rs.getString("hosp_reg_date");
+						String hospCharge = Float.toString(rs.getFloat("hosp_charge"));
+
+						output += "<td>" + hospName + "</td>";
+						output += "<td>" + hospAddress + "</td>";
+						output += "<td>" + hospEmail + "</td>";
+						output += "<td>" + hospPhone + "</td>";
+						output += "<td>" + hospRegDate + "</td>";
+						output += "<td>" + hospCharge + "</td>";
+					}
+					con.close();
+					output += ("</table>");
+				}
+			} catch(Exception e) {
+				output ="Error while getting hospital details";
+				System.err.println(e.getMessage());	
+			}
+		
+		return output;
+	}
+
+	public String getDoctorsHospitalWise() {
+		String output = "";
+		
+		try(Connection con = DBConnector.getConnection()){
+				if(con == null) {
+					return "Error while connecting to the database";
+				}else {
+					String query = "select h.hosp_name,d.doc_fname,d.doc_lname from doctor_has_hospital r,doctor d,hospital h where r.doctor_doc_id=d.doc_id and r.hospital_hosp_id=h.hosp_id group by h.hosp_name,d.doc_fname,d.doc_lname";
+					Statement stmt = con.createStatement();
+					ResultSet rs = stmt.executeQuery(query);
+					
+					output = "<table border=\"1\">"
+							+ "<tr><th>Hospital Name</th><th>Doctor firstname</th><th>Doctor lastname</th></tr>";
+
+					while (rs.next()) {
+						String hospName = rs.getString("hosp_name");
+						String docFname = rs.getString("doc_fname");
+						String docLname = rs.getString("doc_lname");
+						
+						// buttons
+						output += "<tr>";
+						output += "<td>" + hospName + "</td>";
+						output += "<td>" + docFname + "</td>";
+						output += "<td>" + docLname + "</td>";
+						
+						// buttons
+						output +="</tr>";
+						
+					}
+					con.close();
+					output += "</table>";
+				}
+				
+			}catch(Exception e) {
+				output = "Read successfull";
+				System.err.println(e.getMessage());
+			}
+		
+		
+		return output;
+	}
+	
 }

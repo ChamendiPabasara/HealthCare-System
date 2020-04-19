@@ -1,6 +1,7 @@
 package com;
 
 import model.Hospital;
+
 //For REST Service
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,7 +15,7 @@ import org.jsoup.nodes.Document;
 @Path("/Hospitals")
 public class HospitalService {
 	Hospital hospObj = new Hospital();
-	
+
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
@@ -22,9 +23,23 @@ public class HospitalService {
 		return hospObj.readHospital();
 	}
 	
+	@GET
+	@Path("/GetHospital")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.TEXT_HTML)
+	public String getHospitalsByID(String hospData) {
+	
+	//Convert the input string to an XML document
+	 Document doc = Jsoup.parse(hospData, "", Parser.xmlParser());
+
+	//Read the value from the element <itemID>
+	 String hospID = doc.select("hosp_id").text();
+		String output = hospObj.getHospitalDetailsByID(hospID);
+		return output;
+	}
 	
 	@POST()
-	@Path("/")
+	@Path("/Add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertHospitals(@FormParam("hosp_name") String hospName,
@@ -35,9 +50,9 @@ public class HospitalService {
 		String output = hospObj.insertHospital(hospName, hospAddress, hospEmail, hospPhone, hospRegDate, hospCharge);
 		return output;
 	}
-	
+
 	@PUT
-	@Path("/")
+	@Path("/Update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updateHospital(String hospitalData) {
@@ -58,7 +73,7 @@ public class HospitalService {
 	}
 	
 	@DELETE
-	@Path("/")
+	@Path("/Delete")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String deleteItem(String hospData)
@@ -70,5 +85,12 @@ public class HospitalService {
 	 String hospID = doc.select("hosp_id").text();
 	 String output = hospObj.deleteHospital(hospID);
 	return output;
+	}
+	
+	@GET
+	@Path("/Doctors")
+	@Produces(MediaType.TEXT_HTML)
+	public String readDoctorsHospitalWise() {
+		return hospObj.getDoctorsHospitalWise();
 	}
 }
