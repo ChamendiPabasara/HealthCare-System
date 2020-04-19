@@ -203,11 +203,9 @@ public class Payment {
 								String nameOnCard,
 								int cvc,
 								Date expireDate,
-								double subAmount,
 								String status,
 								Date paymentDate,
-								int taxId,
-								int appointmenetId){
+								int appointmentId){
 			
 			try(Connection con = DBConnector.getConnection()) {
 			String updateQuery = "update payment set "
@@ -217,13 +215,13 @@ public class Payment {
 					+ "cvc=?, "
 					+ "expire_date=?, "
 					+ "status=?, "
-					+ "sub_amount=?, "
 					+ "date=?, "
-					+ "tax_tax_id=? , "
 					+ "appoinment_appoinment_id=? " 
 					+ "where payment_id = ?;" ;
 						
 			PreparedStatement pstmt = con.prepareStatement(updateQuery);
+			double subAmount = this.calculateSubAmount(appointmentId, paymentDate);
+			int taxId = this.getValidTax(paymentDate).getKey();
 			pstmt.setString(1,cardType);
 			pstmt.setInt(2,cardNumber);
 			pstmt.setString(3,nameOnCard);
@@ -233,12 +231,12 @@ public class Payment {
 			pstmt.setDouble(7,subAmount);
 			pstmt.setDate(8,paymentDate);
 			pstmt.setInt(9,taxId);
-			pstmt.setInt(10,appointmenetId);
+			pstmt.setInt(10,appointmentId);
 			pstmt.setInt(11,paymentId);
 			pstmt.executeUpdate();
 			con.close();
 	
-			return "Payment updated successfully....";
+			return "Payment updated successfully";
 			}
 			catch(SQLException e){
 				return "Error occur during updating \n" +
