@@ -175,7 +175,7 @@ public class Payment {
 	public Pair<Integer, Float> getValidTax(Date today) {
 		float taxAmount = 0;
 		int taxId = 0;
-		Pair<Integer, Float> pair = new Pair(0,0);
+		Pair<Integer, Float> pair = new Pair(taxId, taxAmount);
 		try(Connection con = DBConnector.getConnection()) {
 			String searchQuey = "select tax_id, tax_amount from tax "
 					+ "where valid_from < ?"
@@ -215,7 +215,9 @@ public class Payment {
 					+ "cvc=?, "
 					+ "expire_date=?, "
 					+ "status=?, "
-					+ "date=?, "
+					+ "sub_amount =? ,"
+					+ "date=?, " 
+					+ "tax_tax_id=?,"
 					+ "appoinment_appoinment_id=? " 
 					+ "where payment_id = ?;" ;
 						
