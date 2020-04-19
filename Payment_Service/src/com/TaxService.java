@@ -3,8 +3,16 @@ package com;
 import model.Tax;
 
 import java.sql.Date;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Path("/Tax")
 public class TaxService {
@@ -16,8 +24,8 @@ public class TaxService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public String addTaxEntry(@FormParam("amount")float amount, 
-    						  @FormParam("validFrom") Date validFrom, 
-    						  @FormParam("validTo") Date validTo){
+    		@NotNull(message = "Valid from Date can't be empty") @FormParam("validFrom") Date validFrom, 
+    		@NotNull(message = "Valid to Date can't be empty") @FormParam("validTo") Date validTo){
         return this.tax.addTaxEntry(amount, validFrom, validTo);
     }
     
@@ -41,8 +49,8 @@ public class TaxService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateTaxEntryById(@QueryParam("id") int id, 
     								@FormParam("amount") float amount, 
-    								@FormParam("validFrom") Date validFrom,
-    								@FormParam("validTo") Date validTo){
+    								@NotNull(message = "Valid from Date can't be empty") @FormParam("validFrom") Date validFrom,
+    								@NotNull(message = "Valid to Date can't be empty") @FormParam("validTo") Date validTo){
     	
         return this.tax.updateTaxEntryById(id, amount, validFrom, validTo );
     }
