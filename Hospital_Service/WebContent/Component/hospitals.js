@@ -40,7 +40,11 @@ $(document).on("click", "#btnSave", function(event) {
 });
 
 // UPDATE
-$(document).on("click",".btnUpdate",function(event) {
+$(document)
+		.on(
+				"click",
+				".btnUpdate",
+				function(event) {
 					$("#hidIHospIDSave").val(
 							$(this).closest("tr").find('#hidHospIDUpdate')
 									.val());

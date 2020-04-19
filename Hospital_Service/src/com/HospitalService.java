@@ -22,22 +22,22 @@ public class HospitalService {
 	public String readHospitals() {
 		return hospObj.readHospital();
 	}
-	
+
 	@GET
 	@Path("/GetHospital")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_HTML)
 	public String getHospitalsByID(String hospData) {
-	
-	//Convert the input string to an XML document
-	 Document doc = Jsoup.parse(hospData, "", Parser.xmlParser());
 
-	//Read the value from the element <itemID>
-	 String hospID = doc.select("hosp_id").text();
+		// Convert the input string to an XML document
+		Document doc = Jsoup.parse(hospData, "", Parser.xmlParser());
+
+		// Read the value from the element <itemID>
+		String hospID = doc.select("hosp_id").text();
 		String output = hospObj.getHospitalDetailsByID(hospID);
 		return output;
 	}
-	
+
 	@POST()
 	@Path("/Add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -71,22 +71,21 @@ public class HospitalService {
 				HospCharge);
 		return output;
 	}
-	
+
 	@DELETE
 	@Path("/Delete")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String deleteItem(String hospData)
-	{
-	//Convert the input string to an XML document
-	 Document doc = Jsoup.parse(hospData, "", Parser.xmlParser());
+	public String deleteItem(String hospData) {
+		// Convert the input string to an XML document
+		Document doc = Jsoup.parse(hospData, "", Parser.xmlParser());
 
-	//Read the value from the element <itemID>
-	 String hospID = doc.select("hosp_id").text();
-	 String output = hospObj.deleteHospital(hospID);
-	return output;
+		// Read the value from the element <hospID>
+		String hospID = doc.select("hosp_id").text();
+		String output = hospObj.deleteHospital(hospID);
+		return output;
 	}
-	
+
 	@GET
 	@Path("/Doctors")
 	@Produces(MediaType.TEXT_HTML)
