@@ -21,9 +21,9 @@ public class PaymentService {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String addPayment(@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on this feild") @NotEmpty(message = "Card type can't be empty") @FormParam("cardType") String cardType,
+	public String addPayment(@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on Card Type feild") @NotEmpty(message = "Card type can't be empty") @FormParam("cardType") String cardType,
 			@NotNull(message = "Card Number can't be empty") @FormParam("cardNumber") int cardNumber,
-			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on this feild") @NotEmpty(message = "Name on card can't be empty") @FormParam("nameOnCard") String nameOnCard,
+			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on Name on Card feild") @NotEmpty(message = "Name on card can't be empty") @FormParam("nameOnCard") String nameOnCard,
 			@Digits(integer=3,fraction =0, message = "cvc can't be empty") @FormParam("cvc") int cvc,
 			@NotNull(message = "Expire date can't be empty") @FormParam("expireDate") Date expireDate,
 			@NotEmpty(message = "Status can't be empty") @FormParam("status") String status,
@@ -55,9 +55,9 @@ public class PaymentService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updatePaymentById(@QueryParam("patientId") int id ,
-			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on this feild") @NotEmpty(message = "Card type can't be empty") @FormParam("cardType") String cardType,
+			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on Card Type feild") @NotEmpty(message = "Card type can't be empty") @FormParam("cardType") String cardType,
 			@NotNull(message = "Card Number can't be empty") @FormParam("cardNumber") int cardNumber,
-			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on this feild") @NotEmpty(message = "Name on card can't be empty") @FormParam("nameOnCard") String nameOnCard,
+			@Pattern(regexp="^[a-z A-Z]*$", message="Can't use numbers on Name on Card feild") @NotEmpty(message = "Name on card can't be empty") @FormParam("nameOnCard") String nameOnCard,
 			@Digits(integer=3,fraction =0, message = "cvc can't be empty") @FormParam("cvc") int cvc,
 			@NotNull(message = "Expire date can't be empty") @FormParam("expireDate") Date expireDate,
 			@NotEmpty(message = "Status can't be empty") @FormParam("status") String status,
