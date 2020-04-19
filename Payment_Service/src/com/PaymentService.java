@@ -49,7 +49,7 @@ public class PaymentService {
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String updatePaymentById(@QueryParam("id") int id ,
+	public String updatePaymentById(@QueryParam("patientId") int id ,
 		@FormParam("cardType") String cardType,
 		@FormParam("cardNumber") int cardNumber,
 		@FormParam("nameOnCard") String nameOnCard,

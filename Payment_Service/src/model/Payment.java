@@ -238,7 +238,7 @@ public class Payment {
 			pstmt.executeUpdate();
 			con.close();
 	
-			return "Payment updated successfully....";
+			return "Payment updated successfully";
 			}
 			catch(SQLException e){
 				return "Error occur during updating \n" +
