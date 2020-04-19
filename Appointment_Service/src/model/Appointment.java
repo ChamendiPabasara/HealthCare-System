@@ -19,7 +19,7 @@ public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 		
 		try(Connection con  = DBConnector.getConnection()){
 			
-			
+			//Query for count AppId for duplicate date & time for same doctor and hospital
 			String checkQuery="select count(appoinment_id)  from appoinment where date = ? and time = ? and doctor_doc_id = ? and hospital_hosp_id = ?";
 			PreparedStatement preparedstatement = con.prepareStatement(checkQuery);
 			
@@ -32,6 +32,7 @@ public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 			
 			newresultset.next();
 			
+			//convert count Appointment ids to integer  
 			int value = Integer.parseInt(newresultset.getObject(1).toString());
 			
 			if(value !=0)
@@ -40,6 +41,7 @@ public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 				
 			}
 			else {
+				//check date is before current date 
 				SimpleDateFormat  simpledateformat = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = new Date(System.currentTimeMillis());
 
@@ -52,7 +54,7 @@ public String addAppointment(Date day, String time, int pid,int did,int hosID) {
 					
 			String insertAppQuery = " insert into appoinment values (NULL,?, ?, ?, ?, ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertAppQuery);
-			////pstmnt.setInt(1,0);
+			
 			pstmnt.setDate(1,day);
 			pstmnt.setString(2,time);
 			pstmnt.setInt(3,pid);
@@ -145,8 +147,8 @@ public String ReadAppointments() {
 				 		"<th>Appointment Time</th>"
 				 		+ "<th>Patient ID</th>"
 				 		+"<th>Doctor ID</th>"
-				 		+"<th>Hospital ID</th>"
-				 		+ "<th>Update</th><th>Remove</th></tr>"; 
+				 		+"<th>Hospital ID</th></tr>";
+				 		 
 			
 		 ResultSet rs = pstmt.executeQuery(readQuery); 
 		
@@ -185,18 +187,60 @@ public String UpdateAppointment(Date day,String time,int AppID) {
 	
 	try(Connection con  = DBConnector.getConnection()){
 		
+		//get doctor id and hospital id for given appointment id
+		String getdocIDQuery = "SELECT doctor_doc_id,hospital_hosp_id  FROM appoinment WHERE appoinment_id = ?";
+		
+		
+		PreparedStatement preparedstatement = con.prepareStatement(getdocIDQuery);
+	
+		preparedstatement.setInt(1,AppID);
+		
+	
+		ResultSet newresultset = preparedstatement.executeQuery();
+		
+		
+		newresultset.next();
+		
+		//Assign into variable 
+		int docid = newresultset.getInt("doctor_doc_id");
+		int hosID = newresultset.getInt("hospital_hosp_id");
+		
+		//get Count of given info
+		String checkQuery="select count(appoinment_id)  from appoinment where date = ? and time = ? and doctor_doc_id = ? and hospital_hosp_id = ?";
+		PreparedStatement prstmnt = con.prepareStatement(checkQuery);
+		
+		prstmnt.setDate(1,day);
+		prstmnt.setString(2,time);
+		prstmnt.setInt(3,docid);
+		prstmnt.setInt(4,hosID);
+		
+		ResultSet newresultset2 = prstmnt.executeQuery();
+		
+		newresultset2.next();
+		
+		//convert count into integer
+		int value = Integer.parseInt(newresultset2.getObject(1).toString());
+		
+		
+		if(value !=0)
+		{
+			return "The particular time slot has been reserved please choose another a time slot.";
+			
+		}
+		
+		else {
+		
 		
 		String updateAppQuery =  "UPDATE appoinment SET date=?,time=? WHERE appoinment_id=?"; 
-		
+
 		PreparedStatement pstmnt = con.prepareStatement(updateAppQuery);
 		pstmnt.setDate(1, day);
 		pstmnt.setString(2, time);
 		pstmnt.setInt(3, AppID);
 		
-		
-         System.out.println(pstmnt.toString());
          pstmnt.execute();
 		return "Apointment Updated successfully...";
+		}
 	}
 	catch(SQLException e){
 		return "Error occured during Updating an Appointment\n" + e.getMessage();
@@ -208,7 +252,7 @@ public String DeleteAppointment(int AppID) {
 	try(Connection con  = DBConnector.getConnection()){
 		
 		
-		// create a prepared statement
+		
 		 String Deletequery = "delete from appoinment where appoinment_id=?";
 		
 		 PreparedStatement pstmnt = con.prepareStatement(Deletequery);

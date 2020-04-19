@@ -71,7 +71,7 @@ public class AppointmentService {
 			) 
 	{
 		String output = App1.UpdateAppointment(day,time,AppID);
-		//System.out.println(AppID);
+
 		return output;
 	}
 	
