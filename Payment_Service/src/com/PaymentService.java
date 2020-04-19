@@ -55,13 +55,11 @@ public class PaymentService {
 		@FormParam("nameOnCard") String nameOnCard,
 		@FormParam("cvc") int cvc,
 		@FormParam("expireDate") Date expireDate,
-		@FormParam("subAmount") double subAmount,
 		@FormParam("status") String status,
 		@FormParam("paymentDate") Date paymentDate,
-		@FormParam("taxId") int taxId,
 		@FormParam("appointmentId") int appointmentId ) {
 		
-	return this.payment.updatePayment(id,cardType,cardNumber,nameOnCard,cvc,expireDate,subAmount,status,paymentDate,taxId,appointmentId);
+	return this.payment.updatePayment(id,cardType,cardNumber,nameOnCard,cvc,expireDate,status,paymentDate,appointmentId);
 	}
 
 }
